@@ -4,7 +4,7 @@ EXECUTABLE=testGP.elf
 CC=arm-none-eabi-gcc
 CCPP=arm-none-eabi-g++
 LD=arm-none-eabi-ld
-#LD=arm-none-eabi-gcc                                                           
+#LD=arm-none-eabi-gcc
 AR=arm-none-eabi-ar
 AS=arm-none-eabi-as
 CP=arm-none-eabi-objcopy
@@ -61,7 +61,7 @@ SRC+=misc.c
 SRC+=stm32f4xx_rcc.c
 ## SRC+=stm32f4xx_adc.c
 #SRC+=stm32f4xx_exti.c
-## SRC+=stm32f4xx_rng.c
+SRC+=stm32f4xx_rng.c
 ## SRC+=stm32f4xx_can.c
 #SRC+=stm32f4xx_flash.c
 ## SRC+=stm32f4xx_rtc.c
@@ -119,7 +119,7 @@ $(BUILD_DIR)/%.o: %.cpp
 	@echo [CCPP] $(notdir $<)
 	@$(CCPP) $(CFLAGS) $< -c -o $@
 
-##	
+##
 
 all: $(OBJ) $(OBJCPP)
 	@echo [AS] $(ASRC)
@@ -136,7 +136,7 @@ all: $(OBJ) $(OBJCPP)
 
 clean:
 	@echo [RM] OBJ
-	@rm -f $(OBJ) 
+	@rm -f $(OBJ)
 	echo [RM] CPP OBJ
 	@rm -f $(CPPOBJ)
 	echo [RM] AOBJ

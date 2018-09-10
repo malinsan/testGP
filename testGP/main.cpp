@@ -10,6 +10,7 @@ extern "C" {
 
 #include <stm32f4xx_dma.h>
 #include <stm32f4xx_usart.h>
+#include <stm32f4xx_rng.h>
 
 #include "string.h"
 #include "StringPrinter.h"
@@ -95,10 +96,14 @@ int main(int argc, char* argv[])
 
   char yo[10] = "yoooooo";
 
-  int r = rand() % 100;
+  uint32_t a;
+  RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
+  RNG_Cmd(ENABLE);
+  if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
+    a = RNG_GetRandomNumber();
+  }
   char random[5];
-  sprintf(random,"%d", r);
-  //sprintf_s(random, 5, "%d", r);
+  sprintf(random,"%d", a);
 
   sp.printStartUp();
 
@@ -116,7 +121,7 @@ int main(int argc, char* argv[])
     blink_led_off();
 
     sp.printText(yoMom);
-    //sp.printText(random);
+    sp.printText(random);
 
     timer_sleep(BLINK_OFF_TICKS);
 
