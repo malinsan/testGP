@@ -1,17 +1,20 @@
 #include <stm32f4xx.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include <BlinkLed.h>
 
 extern "C" {
-  #include <Timer.h>  
+  #include <Timer.h>
 }
 
 #include <stm32f4xx_dma.h>
 #include <stm32f4xx_usart.h>
 
 #include "string.h"
-#include "TestClass.h"
 #include "StringPrinter.h"
+
+
 
 
 
@@ -82,6 +85,8 @@ int main(int argc, char* argv[])
 
   timer_start();
 
+
+
   StringPrinter sp;
 
   char t[10] = "Test";
@@ -90,18 +95,17 @@ int main(int argc, char* argv[])
 
   char yo[10] = "yoooooo";
 
-  sp.printStartUp();
-  //string a = "hej";
-  //sp.printString(a);
+  int r = rand() % 100;
+  char random[5];
+  sprintf(random,"%d", r);
+  //sprintf_s(random, 5, "%d", r);
 
-  TestClass test;
+  sp.printStartUp();
 
 
    while(1)
 
    {
-
-    test.incX();
 
     blink_led_on();
 
@@ -111,13 +115,8 @@ int main(int argc, char* argv[])
 
     blink_led_off();
 
-
-    if(test.getX() % 5 == 0){
-      sp.printText(yoMom);      
-    }else{
-      sp.printText(t);      
-    }
-
+    sp.printText(yoMom);
+    //sp.printText(random);
 
     timer_sleep(BLINK_OFF_TICKS);
 
