@@ -1,5 +1,5 @@
-TARGET=TestCpp
-EXECUTABLE=TestCpp.elf
+TARGET=testGP
+EXECUTABLE=testGP.elf
 
 CC=arm-none-eabi-gcc
 CCPP=arm-none-eabi-g++
@@ -35,6 +35,7 @@ vpath %.cpp $(CURDIR)
 
 BUILD_DIR=$(CURDIR)/build
 BIN_DIR=$(CURDIR)/binary
+SRCCPP_DIR=$(CURDIR)/src
 
 
 DEFS=-DUSE_STDPERIPH_DRIVER
@@ -104,6 +105,7 @@ LDLIBS=$(TOOLCHAIN_ROOT)/fpu/libc_s.a $(TOOLCHAIN_ROOT)/fpu/libm.a
 LDFLAGS=$(COMMONFLAGS) -fno-exceptions -ffunction-sections -fdata-sections -nostartfiles -Wl,--gc-sections,-T$(LINKER_SCRIPT) -specs=rdimon.specs -u _printf_float -mfloat-abi=hard
 
 OBJCPP = $(SRCCPP:%.cpp=$(BUILD_DIR)/%.o)
+#OBJCPP = $($(SRCCPP_DIR)/%.cpp=$(BUILD_DIR)/%.o)
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 #OBJS=$(OBJ) $(CPPOBJ)
