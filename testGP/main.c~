@@ -1,0 +1,56 @@
+#define BLINK_ON_TICKS  (TIMER_FREQUENCY_HZ * 2 / 3)
+#define BLINK_OFF_TICKS (TIMER_FREQUENCY_HZ - BLINK_ON_TICKS)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
+#pragma GCC diagnostic ignored "-Wreturn-type"
+
+int
+main(int argc, char* argv[])
+{
+
+
+
+  while(1)
+    {
+    }
+
+}
+
+#pragma GCC diagnostic pop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+#pragma GCC diagnostic pop
