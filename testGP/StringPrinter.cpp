@@ -1,4 +1,5 @@
 #include "StringPrinter.h"
+#include <stdio.h>
 
 
 StringPrinter::StringPrinter(void){
@@ -23,7 +24,9 @@ void StringPrinter::printText(char * s){
 }
 
 void StringPrinter::printInt(int i){
-
+	char printText[5];
+	sprintf(printText, "%d", i);
+	this->printText(printText);
 }
 
 

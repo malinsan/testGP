@@ -13,7 +13,8 @@ class Individual
     Individual(int length);
   private:
     int fitness;
-    struct instruction instructions [Constants::MAX_INDIVIDUAL_LENGTH];
+//    struct instruction instructions [Constants::MAX_INDIVIDUAL_LENGTH];
+    struct instruction instructions [3];
 };
 
 #endif

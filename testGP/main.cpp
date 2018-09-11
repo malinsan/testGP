@@ -84,6 +84,7 @@ int main(int argc, char* argv[]){
 
   char yoMom[10] = "Din Mamma";
   char random[5];
+  int r;
   Individual i1;
 
   sp.printStartUp();
@@ -91,6 +92,7 @@ int main(int argc, char* argv[]){
    while(1){
 
       randNum.getRandomNumberAsChar(random, 5, 50);
+      r = randNum.getRandomNumber(5,30);
 
       blink_led_on();
 
@@ -100,6 +102,7 @@ int main(int argc, char* argv[]){
 
       sp.printText(yoMom);
       sp.printText(random);
+      sp.printInt(r);
 
       timer_sleep(BLINK_OFF_TICKS);
 
