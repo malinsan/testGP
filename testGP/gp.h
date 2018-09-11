@@ -13,12 +13,13 @@
 class GP {
 public:
   void run();
+  GP();
 private:
   void createPopulation(int populationSize);
   Individual population[POPULATION_SIZE];
   /*
   * TO-DO rest of functions needed for gp
   */
-}
+};
 
 #endif
