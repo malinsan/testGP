@@ -55,6 +55,7 @@ SRCCPP+=TestClass.cpp
 SRCCPP+=StringPrinter.cpp
 SRCCPP+=Random.cpp
 SRCCPP+=Individual.cpp
+SRCCPP+=gp.cpp
 
 SRC=Timer.c
 #SRC+=itoa.c

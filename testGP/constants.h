@@ -2,6 +2,7 @@
 #define CONSTANTS_H
 
 #define MAX_LENGTH 50
+#define POPULATION_SIZE 50
 
 namespace Constants
 {
