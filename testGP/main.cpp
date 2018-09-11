@@ -76,9 +76,6 @@ int main(int argc, char* argv[]){
 
   timer_start();
 
-  Individual i1(2);
-  instruction* instructions = i1.getInstructions();
-  sp.printInt(instructions->reg);
 
   char yoMom[] = "Din Mamma";
   char random[5];

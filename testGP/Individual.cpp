@@ -12,6 +12,9 @@ Individual::Individual(int length){
 
   for(int i = 0; i < length; i++){
     instructions[i].reg = randN.getRandomNumber(0, Constants::REG_MAX);
+    instructions[i].op1 = randN.getRandomNumber(0, Constants::OPERAND_MAX);
+    instructions[i].op2 = randN.getRandomNumber(0, Constants::OPERAND_MAX);
+    instructions[i].operation = randN.getRandomNumber(0, Constants::OPERATOR_MAX);
   }
 }
 
