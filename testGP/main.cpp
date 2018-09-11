@@ -32,7 +32,12 @@ extern "C" {
 
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
+
+/*
+  VARIABLES
+*/
 StringPrinter sp;
+bool rng_enabled = false;
 
 void blink_led_init()
 {
@@ -70,6 +75,12 @@ void blink_led_init()
 uint8_t getRandomNumber(uint32_t min, uint8_t max){
   uint32_t random = 0;
 
+  if(!rng_enabled){
+    RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
+    RNG_Cmd(ENABLE);
+    rng_enabled = true;
+  }
+
   while(random <= min){
     if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
       random = RNG_GetRandomNumber();
@@ -85,29 +96,15 @@ int main(int argc, char* argv[]){
 
   SystemInit();
 
-
-
   blink_led_init();
-
-
-
   blink_led_on();
-
-
 
   timer_start();
 
 
   char t[10] = "Test";
   char yoMom[10] = "Din Mamma";
-
-
   char yo[10] = "yoooooo";
-
-  //random number generation
-  RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
-  RNG_Cmd(ENABLE);
-
 
   sp.printStartUp();
 
