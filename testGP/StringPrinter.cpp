@@ -1,4 +1,5 @@
 #include "StringPrinter.h"
+#include <stdio.h>
 
 
 StringPrinter::StringPrinter(void){
@@ -20,6 +21,12 @@ void StringPrinter::printText(char * s){
 		usartInit = true;
 	}
 	StringPrinter::USART_PutString(s);
+}
+
+void StringPrinter::printInt(int i){
+	char printText[5];
+	sprintf(printText, "%d", i);
+	this->printText(printText);
 }
 
 
@@ -76,10 +83,10 @@ void StringPrinter::init_USART2(void) {
   USART_InitStruct.USART_Parity = USART_Parity_No;
   USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-  
+
 
   USART_Init(USART2, &USART_InitStruct);
   USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
   NVIC_EnableIRQ(USART2_IRQn);
-  
+
 }

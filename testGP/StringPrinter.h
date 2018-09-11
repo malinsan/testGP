@@ -11,6 +11,7 @@ class StringPrinter
 	public:
 		void printStartUp();
 		void printText(char * s);
+		void printInt(int i);
 		StringPrinter();
 	private:
 		void USART_PutString(char *s);

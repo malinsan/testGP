@@ -13,8 +13,10 @@ Random::Random(void){
 */
 uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   uint32_t random = 0;
+  bool firstLoop = false;
 
-  while(random <= min){
+  while(!firstLoop || random < min){
+    firstLoop = true;
     if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
       random = RNG_GetRandomNumber();
       random &= max;

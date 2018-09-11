@@ -13,11 +13,11 @@ extern "C" {
 #include <stm32f4xx_rng.h>
 
 #include "string.h"
+
+#include "constants.h"
 #include "StringPrinter.h"
 #include "Random.h"
-
-
-
+#include "Individual.h"
 
 
 #define BLINK_ON_TICKS (TIMER_FREQUENCY_HZ * 2 / 3)
@@ -33,12 +33,6 @@ extern "C" {
 
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-
-/*
-  VARIABLES
-*/
-StringPrinter sp;
-bool rng_enabled = false;
 
 
 void blink_led_init()
@@ -75,6 +69,7 @@ int main(int argc, char* argv[]){
   SystemInit();
 
   Random randNum;
+  StringPrinter sp;
 
   blink_led_init();
   blink_led_on();
@@ -82,19 +77,18 @@ int main(int argc, char* argv[]){
   timer_start();
 
 
-  char t[10] = "Test";
-  char yoMom[10] = "Din Mamma";
-  char yo[10] = "yoooooo";
+  char yoMom[] = "Din Mamma";
   char random[5];
+  int r;
+
+
 
   sp.printStartUp();
 
    while(1){
 
-     //uint8_t a = randNum.getRandomNumber(5,30);
-     //sprintf(random,"%d", a);
-
       randNum.getRandomNumberAsChar(random, 5, 50);
+      r = randNum.getRandomNumber(5,30);
 
       blink_led_on();
 
@@ -104,6 +98,7 @@ int main(int argc, char* argv[]){
 
       sp.printText(yoMom);
       sp.printText(random);
+      sp.printInt(r);
 
       timer_sleep(BLINK_OFF_TICKS);
 

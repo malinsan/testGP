@@ -1,23 +1,23 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
-struct instruction {
-  int register;
-  int operand1;
-  int operand2;
-  int operator;
-};
+#include "Instruction.h"
+#include "constants.h"
+
+//const int maxLength = Constants::MAX_INDIVIDUAL_LENGTH;
+const int maxLength = 30;
 
 class Individual
 {
   public:
     int getFitness();
     void setFitness(int fitness);
+    instruction * getInstructions();
     Individual();
     Individual(int length);
   private:
     int fitness;
-    instruction instructions[];
+    instruction instructions [MAX_LENGTH];
 };
 
 #endif
