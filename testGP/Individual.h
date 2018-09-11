@@ -18,6 +18,6 @@ class Individual
   private:
     int fitness;
     instruction instructions[];
-}
+};
 
 #endif

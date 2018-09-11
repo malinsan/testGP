@@ -14,6 +14,7 @@ extern "C" {
 
 #include "string.h"
 #include "StringPrinter.h"
+#include "Random.h"
 
 
 
@@ -38,6 +39,8 @@ extern "C" {
 */
 StringPrinter sp;
 bool rng_enabled = false;
+Random randNum;
+
 
 void blink_led_init()
 {
@@ -68,30 +71,6 @@ void blink_led_init()
 
 }
 
-/**
-  Get a random number between min and max.
-  Uses functions from stm32f4xx_rng.c
-*/
-uint8_t getRandomNumber(uint32_t min, uint8_t max){
-  uint32_t random = 0;
-
-  if(!rng_enabled){
-    RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
-    RNG_Cmd(ENABLE);
-    rng_enabled = true;
-  }
-
-  while(random <= min){
-    if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
-      random = RNG_GetRandomNumber();
-      random &= max;
-    }
-  }
-  return (uint8_t)random;
-}
-
-
-
 int main(int argc, char* argv[]){
 
   SystemInit();
@@ -110,15 +89,13 @@ int main(int argc, char* argv[]){
 
    while(1){
 
-     uint8_t a = getRandomNumber(5,30);
+     uint8_t a = randNum.getRandomNumber(5,30);
      char random[5];
      sprintf(random,"%d", a);
 
       blink_led_on();
 
       timer_sleep(BLINK_ON_TICKS);
-
-
 
       blink_led_off();
 
