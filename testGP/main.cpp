@@ -85,14 +85,16 @@ int main(int argc, char* argv[]){
   char t[10] = "Test";
   char yoMom[10] = "Din Mamma";
   char yo[10] = "yoooooo";
+  char random[5];
 
   sp.printStartUp();
 
    while(1){
 
-     uint8_t a = randNum.getRandomNumber(5,30);
-     char random[5];
-     sprintf(random,"%d", a);
+     //uint8_t a = randNum.getRandomNumber(5,30);
+     //sprintf(random,"%d", a);
+
+      randNum.getRandomNumberAsChar(random, 5, 50);
 
       blink_led_on();
 

@@ -6,6 +6,7 @@
 class Random{
   public:
     uint8_t getRandomNumber(uint8_t min, uint8_t max);
+    void getRandomNumberAsChar(char array[], uint8_t min, uint8_t max);
     Random();
   private:
     void enableRNG();

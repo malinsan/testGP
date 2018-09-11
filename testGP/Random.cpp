@@ -1,4 +1,5 @@
 #include "Random.h"
+#include <stdio.h>
 
 short int Random::rng_enabled = 0;
 
@@ -20,6 +21,11 @@ uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
     }
   }
   return (uint8_t)random;
+}
+
+void Random::getRandomNumberAsChar(char array[], uint8_t min, uint8_t max){
+  uint8_t randomNumber = this->getRandomNumber(min,max);
+  sprintf(array,"%d", randomNumber);
 }
 
 /* ####### PRIVATE ####### */
