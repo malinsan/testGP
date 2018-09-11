@@ -2,6 +2,7 @@
 #define INDIVIDUAL_H
 
 #include "Instruction.h"
+#include "constants.h"
 
 class Individual
 {
@@ -12,7 +13,7 @@ class Individual
     Individual(int length);
   private:
     int fitness;
-    struct instruction instruction [];
+    struct instruction instructions [Constants::MAX_INDIVIDUAL_LENGTH];
 };
 
 #endif

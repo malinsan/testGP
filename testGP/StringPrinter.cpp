@@ -22,6 +22,10 @@ void StringPrinter::printText(char * s){
 	StringPrinter::USART_PutString(s);
 }
 
+void StringPrinter::printInt(int i){
+
+}
+
 
 /* ########## PRIVATE ################# */
 void StringPrinter::USART_PutChar(char c)
@@ -76,10 +80,10 @@ void StringPrinter::init_USART2(void) {
   USART_InitStruct.USART_Parity = USART_Parity_No;
   USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-  
+
 
   USART_Init(USART2, &USART_InitStruct);
   USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
   NVIC_EnableIRQ(USART2_IRQn);
-  
+
 }
