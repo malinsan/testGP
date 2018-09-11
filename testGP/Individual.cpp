@@ -6,7 +6,8 @@ Individual::Individual(){
 }
 
 Individual::Individual(int length){
+  
   for(int i = 0; i < length; i++){
-    instructions[i].register = 2;
+    //instructions[i].register = 2;
   }
 }

@@ -1,12 +1,7 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
-struct instruction {
-  int register;
-  int operand1;
-  int operand2;
-  int operator;
-};
+#include "Instruction.h"
 
 class Individual
 {
@@ -17,7 +12,7 @@ class Individual
     Individual(int length);
   private:
     int fitness;
-    instruction instructions[];
+    struct instruction instruction [];
 };
 
 #endif

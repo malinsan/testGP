@@ -15,9 +15,7 @@ extern "C" {
 #include "string.h"
 #include "StringPrinter.h"
 #include "Random.h"
-
-
-
+#include "Individual.h"
 
 
 #define BLINK_ON_TICKS (TIMER_FREQUENCY_HZ * 2 / 3)
@@ -82,17 +80,13 @@ int main(int argc, char* argv[]){
   timer_start();
 
 
-  char t[10] = "Test";
   char yoMom[10] = "Din Mamma";
-  char yo[10] = "yoooooo";
   char random[5];
+  Individual i1;
 
   sp.printStartUp();
 
    while(1){
-
-     //uint8_t a = randNum.getRandomNumber(5,30);
-     //sprintf(random,"%d", a);
 
       randNum.getRandomNumberAsChar(random, 5, 50);
 
