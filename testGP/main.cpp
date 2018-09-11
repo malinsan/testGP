@@ -78,8 +78,6 @@ int main(int argc, char* argv[]){
 
   Individual i1(2);
   instruction* instructions = i1.getInstructions();
-  instruction ins = *instructions;
-  sp.printInt(ins.reg);
   sp.printInt(instructions->reg);
 
   char yoMom[] = "Din Mamma";
