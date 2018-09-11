@@ -50,11 +50,11 @@ COMMONFLAGS=-O$(OPTLVL) $(DBG) -Wall
 
 
 SRCCPP=main.cpp
+SRCCPP+=constants.cpp
 SRCCPP+=TestClass.cpp
 SRCCPP+=StringPrinter.cpp
 SRCCPP+=Random.cpp
 SRCCPP+=Individual.cpp
-SRCCPP+=constants.cpp
 
 SRC=Timer.c
 #SRC+=itoa.c

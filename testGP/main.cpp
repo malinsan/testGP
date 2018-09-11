@@ -34,12 +34,6 @@ extern "C" {
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
 
-/*
-  VARIABLES
-*/
-StringPrinter sp;
-bool rng_enabled = false;
-
 
 void blink_led_init()
 {
@@ -75,17 +69,24 @@ int main(int argc, char* argv[]){
   SystemInit();
 
   Random randNum;
+  StringPrinter sp;
 
   blink_led_init();
   blink_led_on();
 
   timer_start();
 
+  Individual i1(2);
+  instruction* instructions = i1.getInstructions();
+  instruction ins = *instructions;
+  sp.printInt(ins.reg);
+  sp.printInt(instructions->reg);
 
-  char yoMom[10] = "Din Mamma";
+  char yoMom[] = "Din Mamma";
   char random[5];
   int r;
-  Individual i1;
+
+
 
   sp.printStartUp();
 
