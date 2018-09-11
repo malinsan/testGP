@@ -13,6 +13,8 @@ extern "C" {
 #include <stm32f4xx_rng.h>
 
 #include "string.h"
+
+#include "constants.h"
 #include "StringPrinter.h"
 #include "Random.h"
 #include "Individual.h"
