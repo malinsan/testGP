@@ -39,7 +39,6 @@ extern "C" {
 */
 StringPrinter sp;
 bool rng_enabled = false;
-Random randNum;
 
 
 void blink_led_init()
@@ -74,6 +73,8 @@ void blink_led_init()
 int main(int argc, char* argv[]){
 
   SystemInit();
+
+  Random randNum;
 
   blink_led_init();
   blink_led_on();

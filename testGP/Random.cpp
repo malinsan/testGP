@@ -1,11 +1,9 @@
 #include "Random.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 short int Random::rng_enabled = 0;
 
-Random::Random(){
-  this->enableRNG();
+Random::Random(void){
+  enableRNG();
 }
 
 /**
@@ -23,6 +21,8 @@ uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   }
   return (uint8_t)random;
 }
+
+/* ####### PRIVATE ####### */
 
 void Random::enableRNG(){
   if(Random::rng_enabled == 0){
