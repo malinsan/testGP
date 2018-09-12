@@ -1,5 +1,6 @@
 #include "Random.h"
 #include <stdio.h>
+#include "StringPrinter.h"
 
 short int Random::rng_enabled = 0;
 
@@ -13,21 +14,17 @@ Random::Random(void){
 */
 uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   uint32_t random = 0;
-  bool firstLoop = false;
 
-  while(!firstLoop || random < min){
-    firstLoop = true;
-    if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
-      random = RNG_GetRandomNumber();
-      random &= max;
-    }
+  if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
+    random = RNG_GetRandomNumber() % (max+1) + min; //as according to c++ documentation
   }
+
   return (uint8_t)random;
 }
 
 void Random::getRandomNumberAsChar(char array[], uint8_t min, uint8_t max){
   uint8_t randomNumber = this->getRandomNumber(min,max);
-  sprintf(array,"%d", randomNumber);
+  sprintf(array,"%d ", randomNumber);
 }
 
 /* ####### PRIVATE ####### */
