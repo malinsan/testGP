@@ -18,7 +18,7 @@ extern "C" {
 #include "StringPrinter.h"
 #include "Random.h"
 #include "Individual.h"
-
+#include "gp.h"
 
 #define BLINK_ON_TICKS (TIMER_FREQUENCY_HZ * 2 / 3)
 
@@ -66,10 +66,15 @@ void blink_led_init()
 
 int main(int argc, char* argv[]){
 
+  /**
+    Initialization
+  */
   SystemInit();
 
   Random randNum;
   StringPrinter sp;
+  GP gp;
+
 
   blink_led_init();
   blink_led_on();
@@ -80,6 +85,7 @@ int main(int argc, char* argv[]){
   char yoMom[] = "Din Mamma";
   char random[5];
   int r;
+  gp.run();
 
 
 
