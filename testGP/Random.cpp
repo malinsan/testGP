@@ -11,14 +11,19 @@ Random::Random(void){
 /**
   Get a random number between min and max.
   Uses functions from stm32f4xx_rng.c
+  This function does not seem to create any UB  which is nice!
 */
 uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   uint32_t random = 0;
+  bool firstLoop = false;
 
-  if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
-    random = RNG_GetRandomNumber() % (max+1) + min; //as according to c++ documentation
+  while(!firstLoop || random < min){
+    firstLoop = true;
+    if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
+      random = RNG_GetRandomNumber();
+      random &= max;
+    }
   }
-
   return (uint8_t)random;
 }
 
