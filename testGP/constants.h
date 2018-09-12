@@ -1,9 +1,9 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define MAX_LENGTH 10
-#define MIN_LENGTH 5
-#define POPULATION_SIZE 50
+#define MAX_LENGTH 1
+#define MIN_LENGTH 1
+#define POPULATION_SIZE 3
 
 namespace Constants
 {

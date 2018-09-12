@@ -7,6 +7,7 @@ GP::GP(){
 
 }
 
+
 void GP::run(){
   this->createPopulation();
 }
@@ -18,8 +19,17 @@ void GP::createPopulation(){
   StringPrinter sp;
   Random randNum;
   for(int i = 0; i < POPULATION_SIZE; i++){
-    Individual newIndividual(randNum.getRandomNumber(MIN_LENGTH, MAX_LENGTH));
+    int r = randNum.getRandomNumber(MIN_LENGTH, MAX_LENGTH);
+    Individual newIndividual(r);
     population[i] = newIndividual;
     sp.printInt(population[i].getInstructions()->reg);
   }
+}
+
+void GP::evaluatePopulation(){
+
+}
+
+int GP::evaluateIndividual(Individual individualToEvaluate){
+
 }

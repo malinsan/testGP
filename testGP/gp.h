@@ -16,6 +16,8 @@ public:
   GP();
 private:
   void createPopulation();
+  int evaluateIndividual(Individual individualToEvaluate);
+  void evaluatePopulation();
   Individual population[POPULATION_SIZE];
   /*
   * TO-DO rest of functions needed for gp

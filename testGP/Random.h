@@ -10,7 +10,7 @@ class Random{
     Random();
   private:
     void enableRNG();
-    static short int rng_enabled;
+    static bool rng_enabled;
 };
 
 #endif

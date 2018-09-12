@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "StringPrinter.h"
 
-short int Random::rng_enabled = 0;
+bool Random::rng_enabled = false;
 
 Random::Random(void){
   enableRNG();
@@ -16,6 +16,7 @@ Random::Random(void){
 uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   uint32_t random = 0;
   bool firstLoop = false;
+  StringPrinter sp;
 
   while(!firstLoop || random < min){
     firstLoop = true;
@@ -27,6 +28,7 @@ uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   return (uint8_t)random;
 }
 
+
 void Random::getRandomNumberAsChar(char array[], uint8_t min, uint8_t max){
   uint8_t randomNumber = this->getRandomNumber(min,max);
   sprintf(array,"%d ", randomNumber);
@@ -35,9 +37,9 @@ void Random::getRandomNumberAsChar(char array[], uint8_t min, uint8_t max){
 /* ####### PRIVATE ####### */
 
 void Random::enableRNG(){
-  if(Random::rng_enabled == 0){
+  if(!Random::rng_enabled){
     RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE);
     RNG_Cmd(ENABLE);
-    rng_enabled++;
+    rng_enabled = true;
   }
 }
