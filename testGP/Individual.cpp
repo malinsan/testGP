@@ -3,7 +3,7 @@
 #include "constants.h"
 
 
-instruction instructions[MAX_LENGTH] = {};
+Instruction instructions[MAX_LENGTH] = {};
 
 Individual::Individual(){
   Individual(10);
@@ -11,12 +11,12 @@ Individual::Individual(){
 
 Individual::Individual(int length){
   Random randN;
-  instruction instructions[MAX_LENGTH] = {};
 
   if(length > MAX_LENGTH){
     length = MAX_LENGTH;
   }
 
+  this->size = length;
   for(int i = 0; i < length; i++){
     instructions[i].reg = randN.getRandomNumber(0, Constants::REG_MAX);
     instructions[i].op1 = randN.getRandomNumber(0, Constants::OPERAND_MAX);
@@ -26,6 +26,10 @@ Individual::Individual(int length){
 
 }
 
-instruction * Individual::getInstructions(){
+Instruction* Individual::getInstructions(){
   return instructions;
+}
+
+int Individual::getSize(){
+  return size;
 }

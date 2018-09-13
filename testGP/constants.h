@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define MAX_LENGTH 1
+#define MAX_LENGTH 5
 #define MIN_LENGTH 1
 #define POPULATION_SIZE 3
 #define TEST_DATA_SIZE 11

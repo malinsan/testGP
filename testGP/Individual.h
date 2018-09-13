@@ -12,11 +12,13 @@ class Individual
   public:
     int getFitness();
     void setFitness(int fitness);
-    instruction * getInstructions();
+    int getSize();
+    Instruction* getInstructions();
     Individual();
     Individual(int length);
   private:
     int fitness;
+    int size;
 };
 
 #endif
