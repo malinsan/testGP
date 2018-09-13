@@ -33,3 +33,11 @@ Instruction* Individual::getInstructions(){
 int Individual::getSize(){
   return size;
 }
+
+int Individual::getFitness(){
+  return fitness;
+}
+
+void Individual::setFitness(int fitness){
+  this->fitness = fitness;
+}

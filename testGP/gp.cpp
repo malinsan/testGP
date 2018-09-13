@@ -16,8 +16,17 @@ GP::GP(){
 
 
 void GP::run(){
+  int numberOfGenerations = 0;
+
   this->createPopulation();
-  this->evaluateIndividual(population[0]);
+  this->evaluatePopulation();
+
+  while(numberOfGenerations < MAX_GENERATIONS){
+    numberOfGenerations++;
+
+
+
+  }
 }
 
 
@@ -29,19 +38,25 @@ void GP::createPopulation(){
     int r = randNum.getRandomNumber(MIN_LENGTH, MAX_LENGTH);
     Individual newIndividual(r);
     population[i] = newIndividual;
+    population[i].index = i;
   }
 }
 
 void GP::evaluatePopulation(){
+  for(int i = 0; i < POPULATION_SIZE; i++){
+    population[i].setFitness(evaluateIndividual(population[i]));
+  }
 
 }
 
+/*
+  * Calculates the fitness of an individual using MSE
+*/
 float GP::evaluateIndividual(Individual individualToEvaluate){
   float error = 0.0f;
   StringPrinter sp;
   for(int i = 0; i < TEST_DATA_SIZE; i++){
     int y_result = decodeIndividual(individualToEvaluate, i);
-    sp.printInt(y_result);
     int y_real = (float)testData_Y[i];
 
     float y_dist = (float)abs(y_real - y_result);
@@ -54,8 +69,11 @@ float GP::evaluateIndividual(Individual individualToEvaluate){
   return error;
 }
 
+/*
+  * Runs the individual instructions for one value of x and returns the result in register "a"
+*/
 int GP::decodeIndividual(Individual individualToDecode, int x){
-
+                //a,b,c
   int values[] = {x,0,0,-1,0,1};
 
   for(int i = 0; i < individualToDecode.getSize(); i++){

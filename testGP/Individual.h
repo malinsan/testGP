@@ -16,6 +16,8 @@ class Individual
     Instruction* getInstructions();
     Individual();
     Individual(int length);
+
+    int index;
   private:
     int fitness;
     int size;
