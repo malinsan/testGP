@@ -15,15 +15,11 @@ Random::Random(void){
 */
 uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   uint32_t random = 0;
-  bool firstLoop = false;
-  StringPrinter sp;
 
-  while(!firstLoop || random < min){
-    firstLoop = true;
-    if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
-      random = RNG_GetRandomNumber();
-      random &= max;
-    }
+  if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
+    random = RNG_GetRandomNumber();
+    random &= 0xFF;
+    random = random % (max+1) + min; //as according to C++ documentation
   }
   return (uint8_t)random;
 }

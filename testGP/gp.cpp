@@ -7,7 +7,7 @@
 #include "HelperFunctions.h"
 
 /** ALL VARIABLES NEEDED **/
-const int POPULATION_SIZE = 50;
+const int POPULATION_SIZE = 5;
 const int TEST_DATA_SIZE = 11;
 
 const int MAX_GENERATIONS = 5000;
@@ -132,12 +132,11 @@ void GP::tournamentSelection(){
   Individual secondTournament[halfTourSize] = {};
 
   int randomNumbers[TOURNAMENT_SIZE] = {};
-  for(int i = 0; i < TOURNAMENT_SIZE; i++){
+  for(int i = 0; i < TOURNAMENT_SIZE; i){
     int r = randNum.getRandomNumber(0, POPULATION_SIZE);
     if(!isValueInArray(r, randomNumbers, TOURNAMENT_SIZE)){
       randomNumbers[i] = r;
-    }else{
-      i--; //does this work??
+      i++;
     }
   }
 
