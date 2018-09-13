@@ -1,18 +1,18 @@
 #include "gp.h"
 #include "Random.h"
 #include "StringPrinter.h"
-#include <stdio.h>
-#include <string.h>
 #include <math.h>
 
 GP::GP(){
-  this->copyTestData();
+  //this->copyTestData();
+  Individual population[POPULATION_SIZE] = {};
+  int testData_Y[TEST_DATA_SIZE] = {};
 }
 
 
 void GP::run(){
-  this->createPopulation();
-  this->evaluateIndividual(population[0]);
+  //this->createPopulation();
+  //this->evaluateIndividual(population[0]);
 }
 
 
@@ -45,7 +45,7 @@ float GP::evaluateIndividual(Individual individualToEvaluate){
     error += y_sqr;
 
   }
-  
+
   error = sqrt(error / TEST_DATA_SIZE);
   return error;
 }

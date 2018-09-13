@@ -9,6 +9,11 @@ Individual::Individual(){
 
 Individual::Individual(int length){
   Random randN;
+  instruction instructions[MAX_LENGTH] = {};
+
+  if(length > MAX_LENGTH){
+    length = MAX_LENGTH;
+  }
 
   for(int i = 0; i < length; i++){
     instructions[i].reg = randN.getRandomNumber(0, Constants::REG_MAX);
@@ -16,6 +21,7 @@ Individual::Individual(int length){
     instructions[i].op2 = randN.getRandomNumber(0, Constants::OPERAND_MAX);
     instructions[i].operation = randN.getRandomNumber(0, Constants::OPERATOR_MAX);
   }
+
 }
 
 instruction * Individual::getInstructions(){

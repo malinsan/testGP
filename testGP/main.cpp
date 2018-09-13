@@ -74,25 +74,23 @@ int main(int argc, char* argv[]){
   */
   SystemInit();
 
-  Random randNum;
-  StringPrinter sprint;
-  GP gp;
-
-
   blink_led_init();
   blink_led_on();
 
   timer_start();
 
 
+  Random randNum;
+  StringPrinter sprint;
+  GP gp;
+
   char yoMom[] = "Din Mamma";
   char random[5];
   int r;
-  gp.run();
-
-
+  //gp.run();
 
   sprint.printStartUp();
+
 
    while(1){
 

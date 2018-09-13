@@ -11,21 +11,21 @@
 #include "constants.h"
 
 class GP {
-public:
-  void run();
-  GP();
-private:
-  void createPopulation();
-  float evaluateIndividual(Individual individualToEvaluate);
-  int decodeIndividual(Individual individualToDecode, int x);
-  void evaluatePopulation();
-  Individual population[POPULATION_SIZE];
+  public:
+    void run();
+    GP();
+  private:
+    void createPopulation();
+    float evaluateIndividual(Individual individualToEvaluate);
+    int decodeIndividual(Individual individualToDecode, int x);
+    void evaluatePopulation();
+    void copyTestData();
 
-  int testData_Y[TEST_DATA_SIZE];
-  void copyTestData();
-  /*
-  * TO-DO rest of functions needed for gp
-  */
+    Individual population[POPULATION_SIZE];
+    int testData_Y[TEST_DATA_SIZE];
+    /*
+    * TO-DO rest of functions needed for gp
+    */
 };
 
 #endif
