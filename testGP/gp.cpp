@@ -4,10 +4,28 @@
 #include "Random.h"
 #include "StringPrinter.h"
 #include <math.h>
+#include "HelperFunctions.h"
+
+/** ALL VARIABLES NEEDED **/
+const int POPULATION_SIZE = 50;
+const int TEST_DATA_SIZE = 11;
+
+const int MAX_GENERATIONS = 5000;
+const int MIN_LENGTH = 5;
+const int MAX_LENGTH = 10;
+
+//selection
+const int TOURNAMENT_SIZE = 4;
+const float pTour = 0.8f;
+
+//testdata
+const int TEST_DATA_A_Y[] = {1,2,5,10,17,26,37,50,65,82,101}; // x²+1
 
 
 int testData_Y[TEST_DATA_SIZE] = {};
 Individual population[POPULATION_SIZE] = {};
+
+/** END OF VARIABLES **/
 
 
 GP::GP(){
@@ -21,12 +39,14 @@ void GP::run(){
   this->createPopulation();
   this->evaluatePopulation();
 
-  while(numberOfGenerations < MAX_GENERATIONS){
+  this->tournamentSelection();
+
+  /*while(numberOfGenerations < MAX_GENERATIONS){
     numberOfGenerations++;
 
 
 
-  }
+  }*/
 }
 
 
@@ -97,9 +117,54 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
   return values[0];
 }
 
+
+void GP::tournamentSelection(){
+  if(TOURNAMENT_SIZE % 2 != 0){
+    //kaboom
+  }
+
+  StringPrinter sp;
+  Random randNum;
+  int halfTourSize = TOURNAMENT_SIZE/2;
+
+  //create two different tournaments
+  Individual firstTournament[halfTourSize] = {};
+  Individual secondTournament[halfTourSize] = {};
+
+  int randomNumbers[TOURNAMENT_SIZE] = {};
+  for(int i = 0; i < TOURNAMENT_SIZE; i++){
+    int r = randNum.getRandomNumber(0, POPULATION_SIZE);
+    if(!isValueInArray(r, randomNumbers, TOURNAMENT_SIZE)){
+      randomNumbers[i] = r;
+    }else{
+      i--; //does this work??
+    }
+  }
+
+  for(int i = 0; i < 4; i++){
+    sp.printInt(randomNumbers[i]);
+  }
+
+
+  //randomly pick TOURNAMENT_SIZE individuals from the population
+  //and put them in the tournaments
+  for(int i = 0; i < TOURNAMENT_SIZE; i++){
+    if(i < halfTourSize){
+      firstTournament[i] = population[randomNumbers[i]];
+    }else{
+      secondTournament[i-halfTourSize] = population[randomNumbers[i]];
+    }
+  }
+
+
+}
+
+
+
+
 void GP::copyTestData(){
   for(int i = 0; i < TEST_DATA_SIZE; i++){
-    testData_Y[i] = Constants::TEST_DATA_A_Y[i];
+    testData_Y[i] = TEST_DATA_A_Y[i];
   }
 
 }

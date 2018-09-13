@@ -8,7 +8,6 @@
 #define GP_H
 
 #include "Individual.h"
-#include "constants.h"
 
 class GP {
   public:
@@ -20,6 +19,9 @@ class GP {
     int decodeIndividual(Individual individualToDecode, int x);
     void evaluatePopulation();
     void copyTestData();
+
+    //selection
+    void tournamentSelection();
 
     /*
     * TO-DO rest of functions needed for gp

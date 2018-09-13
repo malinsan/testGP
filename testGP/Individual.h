@@ -2,8 +2,6 @@
 #define INDIVIDUAL_H
 
 #include "Instruction.h"
-#include "constants.h"
-
 //const int maxLength = Constants::MAX_INDIVIDUAL_LENGTH;
 const int maxLength = 30;
 
