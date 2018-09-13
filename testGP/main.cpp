@@ -64,6 +64,9 @@ void blink_led_init()
 
 }
 
+
+
+
 int main(int argc, char* argv[]){
 
   /**
@@ -72,7 +75,7 @@ int main(int argc, char* argv[]){
   SystemInit();
 
   Random randNum;
-  StringPrinter sp;
+  StringPrinter sprint;
   GP gp;
 
 
@@ -89,7 +92,7 @@ int main(int argc, char* argv[]){
 
 
 
-  sp.printStartUp();
+  sprint.printStartUp();
 
    while(1){
 
@@ -102,8 +105,8 @@ int main(int argc, char* argv[]){
 
       blink_led_off();
 
-      sp.printText(yoMom);
-      sp.printText(random);
+      sprint.printText(yoMom);
+      sprint.printText(random);
       //sp.printInt(r);
 
       timer_sleep(BLINK_OFF_TICKS);
@@ -112,8 +115,6 @@ int main(int argc, char* argv[]){
 
 
 }
-
-
 
 
 

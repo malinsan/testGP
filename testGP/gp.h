@@ -19,6 +19,10 @@ private:
   int evaluateIndividual(Individual individualToEvaluate);
   void evaluatePopulation();
   Individual population[POPULATION_SIZE];
+
+  int testDataSize;
+  int testData_Y[TEST_DATA_SIZE];
+  void copyTestData();
   /*
   * TO-DO rest of functions needed for gp
   */
