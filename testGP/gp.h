@@ -21,8 +21,6 @@ class GP {
     void evaluatePopulation();
     void copyTestData();
 
-    Individual population[POPULATION_SIZE];
-    int testData_Y[TEST_DATA_SIZE];
     /*
     * TO-DO rest of functions needed for gp
     */

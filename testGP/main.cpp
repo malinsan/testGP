@@ -87,7 +87,7 @@ int main(int argc, char* argv[]){
   char yoMom[] = "Din Mamma";
   char random[5];
   int r;
-  //gp.run();
+  gp.run();
 
   sprint.printStartUp();
 

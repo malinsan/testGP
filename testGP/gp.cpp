@@ -3,16 +3,19 @@
 #include "StringPrinter.h"
 #include <math.h>
 
+
+int testData_Y[TEST_DATA_SIZE] = {};
+Individual population[POPULATION_SIZE] = {};
+
+
 GP::GP(){
-  //this->copyTestData();
-  Individual population[POPULATION_SIZE] = {};
-  int testData_Y[TEST_DATA_SIZE] = {};
+  this->copyTestData();
 }
 
 
 void GP::run(){
-  //this->createPopulation();
-  //this->evaluateIndividual(population[0]);
+  this->createPopulation();
+  this->evaluateIndividual(population[0]);
 }
 
 
@@ -24,7 +27,6 @@ void GP::createPopulation(){
     int r = randNum.getRandomNumber(MIN_LENGTH, MAX_LENGTH);
     Individual newIndividual(r);
     population[i] = newIndividual;
-    //sp.printInt(population[i].getInstructions()->reg);
   }
 }
 
@@ -45,7 +47,6 @@ float GP::evaluateIndividual(Individual individualToEvaluate){
     error += y_sqr;
 
   }
-
   error = sqrt(error / TEST_DATA_SIZE);
   return error;
 }
@@ -58,4 +59,5 @@ void GP::copyTestData(){
   for(int i = 0; i < TEST_DATA_SIZE; i++){
     testData_Y[i] = Constants::TEST_DATA_A_Y[i];
   }
+
 }

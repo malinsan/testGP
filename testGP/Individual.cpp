@@ -3,6 +3,8 @@
 #include "constants.h"
 
 
+instruction instructions[MAX_LENGTH] = {};
+
 Individual::Individual(){
   Individual(10);
 }

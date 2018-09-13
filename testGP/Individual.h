@@ -17,7 +17,6 @@ class Individual
     Individual(int length);
   private:
     int fitness;
-    instruction instructions[MAX_LENGTH];
 };
 
 #endif
