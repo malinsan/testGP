@@ -19,5 +19,8 @@ namespace Constants
   extern const int TEST_DATA_A_Y[]; //x²+1
 }
 
+namespace Helper_Functions
+{
+}
 
 #endif

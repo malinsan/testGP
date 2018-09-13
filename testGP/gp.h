@@ -16,11 +16,11 @@ public:
   GP();
 private:
   void createPopulation();
-  int evaluateIndividual(Individual individualToEvaluate);
+  float evaluateIndividual(Individual individualToEvaluate);
+  int decodeIndividual(Individual individualToDecode, int x);
   void evaluatePopulation();
   Individual population[POPULATION_SIZE];
 
-  int testDataSize;
   int testData_Y[TEST_DATA_SIZE];
   void copyTestData();
   /*

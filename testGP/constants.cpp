@@ -25,14 +25,5 @@ namespace Constants
 
 namespace Helper_Functions
 {
-  int sizeOfIntArray(int * intArray){
-    StringPrinter sp;
-    int size = 0;
-    while(*intArray){
-      size = size + 1;
-      sp.printInt(size);
-      *intArray++;
-    }
-    return size;
-  }
+
 }
