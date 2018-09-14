@@ -1,6 +1,7 @@
 #include "Random.h"
 #include <stdio.h>
 #include "StringPrinter.h"
+#include "HelperFunctions.h"
 
 bool Random::rng_enabled = false;
 
@@ -19,7 +20,7 @@ uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
     random = RNG_GetRandomNumber();
     random &= 0xFF;
-    random = random % (max+1) + min; //as according to C++ documentation
+    random = random % (max) + min; //as according to C++ documentation
   }
   return (uint8_t)random;
 }
@@ -28,6 +29,17 @@ uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
 void Random::getRandomNumberAsChar(char array[], uint8_t min, uint8_t max){
   uint8_t randomNumber = this->getRandomNumber(min,max);
   sprintf(array,"%d ", randomNumber);
+}
+
+void Random::getRandomNumberArray(int array[], int size, uint8_t min, uint8_t max){
+  for(int i = 0; i < size; i){
+    int r = this->getRandomNumber(min, max); //+1 or otherwise we can never pick the 0th of the population
+    if(!isValueInArray(r, array, size)){
+      array[i] = r;
+      i++;
+    }
+  }
+
 }
 
 /* ####### PRIVATE ####### */
