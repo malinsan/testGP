@@ -25,7 +25,10 @@ Individual::Individual(int length){
   Random randN;
   StringPrinter sp;
 
+  this->index = 0;
+  this->fitness = 10000;
   this->size = length;
+  this->individualNumber = numberOfIndividuals;
 
   for(int i = 0; i < length; i++){
     listOfInstructions[numberOfIndividuals][i].reg = randN.getRandomNumber(0, REG_MAX);
@@ -34,12 +37,12 @@ Individual::Individual(int length){
     listOfInstructions[numberOfIndividuals][i].operation = randN.getRandomNumber(0, OPERATOR_MAX);
   }
 
-  this->individualNumber = numberOfIndividuals;
+
   numberOfIndividuals++;
 }
 
 Instruction* Individual::getInstructions(){
-  return listOfInstructions[individualNumber];
+  return listOfInstructions[this->individualNumber];
 }
 
 int Individual::getSize(){

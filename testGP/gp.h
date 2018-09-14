@@ -19,9 +19,12 @@ class GP {
     int decodeIndividual(Individual individualToDecode, int x);
     void evaluatePopulation();
     void copyTestData();
+    bool isOverflow(int values[], int size);
 
     //selection
     void tournamentSelection();
+    void runTournament(Individual firstTournament[], Individual secondTournament[],
+                        Individual winners[], Individual losers[], int size);
 
 
     /*
