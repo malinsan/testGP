@@ -131,19 +131,20 @@ void GP::tournamentSelection(){
   Individual firstTournament[halfTourSize] = {};
   Individual secondTournament[halfTourSize] = {};
 
+  //** RANDOMIZING NUMBERS **//
   int randomNumbers[TOURNAMENT_SIZE] = {};
   for(int i = 0; i < TOURNAMENT_SIZE; i){
-    int r = randNum.getRandomNumber(0, POPULATION_SIZE);
+    int r = randNum.getRandomNumber(1, POPULATION_SIZE+1); //+1 or otherwise we can never pick the 0th of the population
     if(!isValueInArray(r, randomNumbers, TOURNAMENT_SIZE)){
       randomNumbers[i] = r;
       i++;
     }
   }
 
-  for(int i = 0; i < 4; i++){
-    sp.printInt(randomNumbers[i]);
+  for(int i = 0; i < TOURNAMENT_SIZE; i++){
+    randomNumbers[i] --;
   }
-
+  // RANDOMIZING NUMBERS END //
 
   //randomly pick TOURNAMENT_SIZE individuals from the population
   //and put them in the tournaments
