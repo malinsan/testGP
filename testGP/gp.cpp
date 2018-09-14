@@ -11,8 +11,9 @@ const int POPULATION_SIZE = 5;
 const int TEST_DATA_SIZE = 11;
 
 const int MAX_GENERATIONS = 5000;
-const int MIN_LENGTH = 5;
 const int MAX_LENGTH = 10;
+const int MIN_LENGTH = 5;
+
 
 //selection
 const int TOURNAMENT_SIZE = 4;
@@ -37,7 +38,7 @@ void GP::run(){
   int numberOfGenerations = 0;
 
   this->createPopulation();
-  this->evaluatePopulation();
+  //this->evaluatePopulation();
 
   this->tournamentSelection();
 
@@ -54,6 +55,7 @@ void GP::run(){
 
 void GP::createPopulation(){
   Random randNum;
+  StringPrinter sp;
   for(int i = 0; i < POPULATION_SIZE; i++){
     int r = randNum.getRandomNumber(MIN_LENGTH, MAX_LENGTH);
     Individual newIndividual(r);
@@ -111,7 +113,7 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
         result = values[currentInstruction.op1] * values[currentInstruction.op2];
         break;
     }
-    values[0] = result;
+    values[currentInstruction.reg] = result; //if reg > 5 kabooom
   }
 
   return values[0];
@@ -128,31 +130,32 @@ void GP::tournamentSelection(){
   int halfTourSize = TOURNAMENT_SIZE/2;
 
   //create two different tournaments
-  Individual firstTournament[halfTourSize] = {};
-  Individual secondTournament[halfTourSize] = {};
+  Individual firstTournament[halfTourSize];
+  Individual secondTournament[halfTourSize];
 
   //** RANDOMIZING NUMBERS **//
   int randomNumbers[TOURNAMENT_SIZE] = {};
-  for(int i = 0; i < TOURNAMENT_SIZE; i){
-    int r = randNum.getRandomNumber(1, POPULATION_SIZE+1); //+1 or otherwise we can never pick the 0th of the population
-    if(!isValueInArray(r, randomNumbers, TOURNAMENT_SIZE)){
-      randomNumbers[i] = r;
-      i++;
-    }
-  }
+  // +1 or we can't get the 0th individual
+  randNum.getRandomNumberArray(randomNumbers, TOURNAMENT_SIZE, 1, POPULATION_SIZE-1);
 
   for(int i = 0; i < TOURNAMENT_SIZE; i++){
-    randomNumbers[i] --;
+    randomNumbers[i] --; //-1 to get the 'real' index
+    //sp.printInt(444);
+    sp.printInt(randomNumbers[i]);
+    sp.printInt(population[randomNumbers[i]].getInstructions()[0].reg);
   }
   // RANDOMIZING NUMBERS END //
 
-  //randomly pick TOURNAMENT_SIZE individuals from the population
-  //and put them in the tournaments
+  //use random numbers to fill in the tournaments
   for(int i = 0; i < TOURNAMENT_SIZE; i++){
     if(i < halfTourSize){
       firstTournament[i] = population[randomNumbers[i]];
+      //sp.printInt(2222);
+      //sp.printInt(firstTournament[i].getInstructions()[0].reg);
     }else{
+      /*sp.printInt(44444);
       secondTournament[i-halfTourSize] = population[randomNumbers[i]];
+      sp.printInt(secondTournament[i-halfTourSize].getInstructions()[0].reg);*/
     }
   }
 

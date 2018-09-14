@@ -14,7 +14,6 @@ extern "C" {
 
 #include "string.h"
 
-#include "constants.h"
 #include "StringPrinter.h"
 #include "Random.h"
 #include "Individual.h"
@@ -95,7 +94,7 @@ int main(int argc, char* argv[]){
    while(1){
 
       randNum.getRandomNumberAsChar(random, 0, 2);
-      r = randNum.getRandomNumber(5,30);
+      r = randNum.getRandomNumber(0,2);
 
       blink_led_on();
 
@@ -104,8 +103,8 @@ int main(int argc, char* argv[]){
       blink_led_off();
 
       sprint.printText(yoMom);
-      sprint.printText(random);
-      //sp.printInt(r);
+      //sprint.printText(random);
+      sprint.printInt(r);
 
       timer_sleep(BLINK_OFF_TICKS);
 
