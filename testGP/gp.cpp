@@ -8,20 +8,28 @@
 #include <limits.h>
 
 /** ALL VARIABLES NEEDED **/
-const int POPULATION_SIZE = 5;
+const int POPULATION_SIZE = 20;
 const int TEST_DATA_SIZE = 11;
 
-const int MAX_GENERATIONS = 5000;
+const int MAX_GENERATIONS = 500;
 const int MAX_LENGTH = 10;
 const int MIN_LENGTH = 5;
 
 
 //selection
 const int TOURNAMENT_SIZE = 4;
-const float pTour = 0.8f;
+const int PTOUR = 80;
+
+//crossover
+const int PCROSS = 60;
+
+//mutation
+const int PMUT = 5;
 
 //testdata
 const int TEST_DATA_A_Y[11] = {1,2,5,10,17,26,37,50,65,82,101}; // x²+1
+const int TEST_DATA_B_Y[11] = {1,3,11,31,69,131,223,351,521,739,1011}; //x³+x+1
+const int TEST_DATA_C_Y[11] = {1, 4, 5, 9, 12, 15, 20, 67, 89, 120, 234}; //random function
 
 
 //int testData_Y[TEST_DATA_SIZE] = {};
@@ -42,33 +50,53 @@ void GP::run(){
   this->createPopulation();
   this->evaluatePopulation();
 
-
-  Individual children[2];
-  this->tournamentSelection(children);
-
-  for(int i = 0; i < MAX_LENGTH; i++){
-    Instruction anInstruction = children[0].getInstructions()[i];
-    sp.printInt(99999);
-    sp.printInt(anInstruction.op1);
-    sp.printInt(anInstruction.op2);
-  }
-  this->singlePointCrossover(children);
-
-  for(int i = 0; i < MAX_LENGTH; i++){
-    Instruction anInstruction = children[0].getInstructions()[i];
-    sp.printInt(88888);
-    sp.printInt(anInstruction.op1);
-    sp.printInt(anInstruction.op2);
+  //find best individual
+  Individual bestIndividual = population[0];
+  for(int i = 1; i < POPULATION_SIZE; i++){
+    if(population[i].getFitness() < bestIndividual.getFitness()){
+      bestIndividual = population[i];
+    }
   }
 
+  char text[20] = "Best Individual: ";
+  sp.printText(text);
+  sp.printInt(bestIndividual.getFitness());
 
-
-  /*while(numberOfGenerations < MAX_GENERATIONS){
+  while(numberOfGenerations < MAX_GENERATIONS){
+    sp.printInt(numberOfGenerations);
     numberOfGenerations++;
 
+    Individual children[2];
+    this->tournamentSelection(children);
 
+    //this->singlePointCrossover(children);
+    //mutate children
+    this->mutation(children);
 
-  }*/
+    //evaluate children
+    for(int i = 0; i < 2; i++){
+      children[i].setFitness(evaluateIndividual(children[i]));
+      population[children[i].index] = children[i];
+    }
+  }
+
+  //find best individual
+  bestIndividual = population[0];
+  for(int i = 1; i < POPULATION_SIZE; i++){
+    if(population[i].getFitness() < bestIndividual.getFitness()){
+      bestIndividual = population[i];
+    }
+  }
+
+  //char text[20] = "Best Individual: ";
+  sp.printText(text);
+  sp.printInt(bestIndividual.getFitness());
+  char individualString [bestIndividual.getSize()][10];
+  bestIndividual.toString(individualString);
+
+  for(int i = 0; i < bestIndividual.getSize(); i++){
+    sp.printText(individualString[0]);
+  }
 }
 
 
@@ -99,6 +127,7 @@ float GP::evaluateIndividual(Individual individualToEvaluate){
   StringPrinter sp;
   for(int i = 0; i < TEST_DATA_SIZE; i++){
     int y_result = decodeIndividual(individualToEvaluate, i);
+
     int y_real = TEST_DATA_A_Y[i];
     float y_dist = (float)abs(y_real - y_result);
     float y_sqr = pow(y_dist, 2.0f); //danger??
@@ -143,6 +172,9 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
         }
         result = operand1 * operand2;
         break;
+      default:
+        sp.printInt(99999);
+        break;
     }
     values[currentInstruction.reg] = result; //if reg > 5 kabooom
   }
@@ -163,13 +195,15 @@ void GP::tournamentSelection(Individual children[]){
   Individual firstTournament[halfTourSize];
   Individual secondTournament[halfTourSize];
 
+
   //** RANDOMIZING NUMBERS **//
   int randomNumbers[TOURNAMENT_SIZE] = {};
   // +1 or we can't get the 0th individual
-  randNum.getRandomNumberArray(randomNumbers, TOURNAMENT_SIZE, 1, POPULATION_SIZE-1);
+  randNum.getRandomNumberArray(randomNumbers, TOURNAMENT_SIZE, 1, POPULATION_SIZE);
 
   for(int i = 0; i < TOURNAMENT_SIZE; i++){
     randomNumbers[i] --; //-1 to get the 'real' index
+
     if(randomNumbers[i] >= POPULATION_SIZE){
       //kaboom
     }
@@ -196,6 +230,8 @@ void GP::tournamentSelection(Individual children[]){
     losers[i].setInstructions(winners[i].individualNumber);
     losers[i].setFitness(winners[i].getFitness());
     losers[i].setSize(winners[i].getSize());
+
+    population[losers[i].index] = losers[i]; // replace losers with winners
 
     children[i] = winners[i];
   }
@@ -235,23 +271,31 @@ void GP::runTournament(Individual firstTournament[], Individual secondTournament
 void GP::singlePointCrossover(Individual children[]){
   Random randNum;
 
-  //pick a crossover point
-  int child1NewSize = MAX_LENGTH +1;
-  int child2NewSize = MAX_LENGTH +1;
+  if(randNum.getRandomNumber(0,100) < PCROSS){
+    //pick a crossover point
+    int child1NewSize = MAX_LENGTH +1;
+    int child2NewSize = MAX_LENGTH +1;
 
-  int crossPoint1 = 0;
-  int crossPoint2 = 0;
+    int crossPoint1 = 0;
+    int crossPoint2 = 0;
 
-  while(child1NewSize > MAX_LENGTH || child2NewSize > MAX_LENGTH){
-    crossPoint1 = randNum.getRandomNumber(1, children[0].getSize()-1);
-    crossPoint2 = randNum.getRandomNumber(1, children[1].getSize()-1);
+    while(child1NewSize > MAX_LENGTH || child2NewSize > MAX_LENGTH){
+      crossPoint1 = randNum.getRandomNumber(1, children[0].getSize()-1);
+      crossPoint2 = randNum.getRandomNumber(1, children[1].getSize()-1);
 
-    child1NewSize = (crossPoint1) + (children[1].getSize() - crossPoint2);
-    child2NewSize = (crossPoint2) + (children[0].getSize() - crossPoint1);
+      child1NewSize = (crossPoint1) + (children[1].getSize() - crossPoint2);
+      child2NewSize = (crossPoint2) + (children[0].getSize() - crossPoint1);
+    }
+
+    children[0].crossoverInstructions(crossPoint1, crossPoint2, children[1].individualNumber);
   }
 
-  children[0].crossoverInstructions(crossPoint1, crossPoint2, children[1].individualNumber);
+}
 
+void GP::mutation(Individual children[]){
+  for(int i = 0; i < 2; i++){
+    children[i].mutate(PMUT);
+  }
 }
 
 

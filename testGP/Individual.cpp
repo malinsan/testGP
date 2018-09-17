@@ -1,6 +1,8 @@
 #include "Individual.h"
 #include "Random.h"
 #include "StringPrinter.h"
+#include "HelperFunctions.h"
+#include <stdio.h>
 
 /*
   * Registers:  a, b, c :
@@ -15,7 +17,7 @@ const int OPERAND_MAX = 5;
 const int OPERATOR_MAX = 2;
 
 const int maxL = 10;
-Instruction listOfInstructions[5][maxL] = {}; //population * maxlength
+Instruction listOfInstructions[20][maxL] = {}; //population * maxlength
 int numberOfIndividuals = 0;
 
 Individual::Individual(){
@@ -53,8 +55,6 @@ void Individual::setInstructions(int listOfInstructionsIndex){
   int k = this->individualNumber;
   for(int i = 0; i < maxL; i++){
     listOfInstructions[k][i] = listOfInstructions[listOfInstructionsIndex][i];
-    k++;
-    listOfInstructionsIndex++;
   }
 }
 
@@ -77,8 +77,48 @@ void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, int ind
     listOfInstructions[individual2][i] = savedInstructions[k];
     k++;
   }
+}
 
+void Individual::mutate(int pMut){
+  StringPrinter sp;
+  Random randNum;
+  for(int i = 0; i < this->size; i++){
+    Instruction currentInstruction = listOfInstructions[this->individualNumber][i];
+    for(int i = 0; i < 4; i++){ //reg, op1, operator, op2,
+      if(randNum.getRandomNumber(0,100) < pMut){
+        switch(i){
+          case 0:
+            currentInstruction.reg = randNum.getRandomNumber(0, REG_MAX);
+            break;
+          case 1:
+            currentInstruction.op1 = randNum.getRandomNumber(0, OPERAND_MAX);
+            break;
+          case 2:
+            currentInstruction.operation = randNum.getRandomNumber(0, OPERATOR_MAX);
+            break;
+          case 3:
+            currentInstruction.op2 = randNum.getRandomNumber(0, OPERAND_MAX);
+            break;
+        }
+      }
+    }
+    listOfInstructions[this->individualNumber][i] = currentInstruction;
+  }
 
+}
+
+void Individual::toString(char individualString [][10]){
+  for(int i = 0; i < this->size; i++){
+    Instruction currentInstruction = listOfInstructions[this->individualNumber][i];
+
+    char reg = getRegChar(currentInstruction.reg);
+    char op1 = getOperandChar(currentInstruction.op1);
+    char op2 = getOperandChar(currentInstruction.op2);
+    char operation = getOperationChar(currentInstruction.operation);
+
+    sprintf(individualString[i], "%c = %c %c %c \r", reg, op1, operation, op2);
+
+  }
 }
 
 int Individual::getSize(){

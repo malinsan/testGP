@@ -29,6 +29,9 @@ class GP {
 
     //crossover
     void singlePointCrossover(Individual children[]);
+
+    //mutation
+    void mutation(Individual children[]);
     /*
     * TO-DO rest of functions needed for gp
     */

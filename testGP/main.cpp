@@ -102,9 +102,9 @@ int main(int argc, char* argv[]){
 
       blink_led_off();
 
-      sprint.printText(yoMom);
+      //sprint.printText(yoMom);
       //sprint.printText(random);
-      sprint.printInt(r);
+      //sprint.printInt(r);
 
       timer_sleep(BLINK_OFF_TICKS);
 
