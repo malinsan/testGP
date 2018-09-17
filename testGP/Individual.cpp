@@ -56,6 +56,28 @@ void Individual::setInstructions(int listOfInstructionsIndex){
     k++;
     listOfInstructionsIndex++;
   }
+}
+
+void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, int individual2){
+
+  //save instructions
+  Instruction savedInstructions [maxL];
+  for(int i = 0; i < maxL; i++){
+    savedInstructions[i] = listOfInstructions[this->individualNumber][i];
+  }
+
+  //overwrite instructions
+  int k = crossPoint2;
+  for(int i = crossPoint1; i < maxL; i++){
+    listOfInstructions[this->individualNumber][i] = listOfInstructions[individual2][k];
+    k++;
+  }
+  k = crossPoint1;
+  for(int i = crossPoint2; i < maxL; i++){
+    listOfInstructions[individual2][i] = savedInstructions[k];
+    k++;
+  }
+
 
 }
 

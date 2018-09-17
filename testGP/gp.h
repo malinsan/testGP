@@ -28,6 +28,7 @@ class GP {
 
 
     //crossover
+    void singlePointCrossover(Individual children[]);
     /*
     * TO-DO rest of functions needed for gp
     */

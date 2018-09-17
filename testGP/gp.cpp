@@ -36,6 +36,7 @@ GP::GP(){
 
 
 void GP::run(){
+  StringPrinter sp;
   int numberOfGenerations = 0;
 
   this->createPopulation();
@@ -44,6 +45,23 @@ void GP::run(){
 
   Individual children[2];
   this->tournamentSelection(children);
+
+  for(int i = 0; i < MAX_LENGTH; i++){
+    Instruction anInstruction = children[0].getInstructions()[i];
+    sp.printInt(99999);
+    sp.printInt(anInstruction.op1);
+    sp.printInt(anInstruction.op2);
+  }
+  this->singlePointCrossover(children);
+
+  for(int i = 0; i < MAX_LENGTH; i++){
+    Instruction anInstruction = children[0].getInstructions()[i];
+    sp.printInt(88888);
+    sp.printInt(anInstruction.op1);
+    sp.printInt(anInstruction.op2);
+  }
+
+
 
   /*while(numberOfGenerations < MAX_GENERATIONS){
     numberOfGenerations++;
@@ -167,14 +185,14 @@ void GP::tournamentSelection(Individual children[]){
     }
   }
 
-  Individual winners[halfTourSize];
-  Individual losers[halfTourSize];
+  Individual winners[2];
+  Individual losers[2];
 
   //get winners and losers
   runTournament(firstTournament, secondTournament, winners, losers, halfTourSize);
 
   //copy winners to losers
-  for(int i = 0; i < halfTourSize; i++){
+  for(int i = 0; i < 2; i++){
     losers[i].setInstructions(winners[i].individualNumber);
     losers[i].setFitness(winners[i].getFitness());
     losers[i].setSize(winners[i].getSize());
@@ -213,6 +231,28 @@ void GP::runTournament(Individual firstTournament[], Individual secondTournament
   losers[1] = loser;
 }
 
+
+void GP::singlePointCrossover(Individual children[]){
+  Random randNum;
+
+  //pick a crossover point
+  int child1NewSize = MAX_LENGTH +1;
+  int child2NewSize = MAX_LENGTH +1;
+
+  int crossPoint1 = 0;
+  int crossPoint2 = 0;
+
+  while(child1NewSize > MAX_LENGTH || child2NewSize > MAX_LENGTH){
+    crossPoint1 = randNum.getRandomNumber(1, children[0].getSize()-1);
+    crossPoint2 = randNum.getRandomNumber(1, children[1].getSize()-1);
+
+    child1NewSize = (crossPoint1) + (children[1].getSize() - crossPoint2);
+    child2NewSize = (crossPoint2) + (children[0].getSize() - crossPoint1);
+  }
+
+  children[0].crossoverInstructions(crossPoint1, crossPoint2, children[1].individualNumber);
+
+}
 
 
 void GP::copyTestData(){
