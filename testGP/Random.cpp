@@ -21,7 +21,7 @@ uint8_t Random::getRandomNumber(uint8_t min, uint8_t max){
   if(RNG_GetFlagStatus(RNG_FLAG_DRDY)){
     random = RNG_GetRandomNumber();
     random &= 0xFF;
-    random = random % (max+1) + min; //as according to C++ documentation
+    random = (random % (max-min+1)) + min; //as according to C++ documentation
   }
   return (uint8_t)random;
 }

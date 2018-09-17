@@ -5,6 +5,7 @@
 #include "StringPrinter.h"
 #include <math.h>
 #include "HelperFunctions.h"
+#include <limits.h>
 
 /** ALL VARIABLES NEEDED **/
 const int POPULATION_SIZE = 5;
@@ -20,7 +21,7 @@ const int TOURNAMENT_SIZE = 4;
 const float pTour = 0.8f;
 
 //testdata
-const int TEST_DATA_A_Y[] = {1,2,5,10,17,26,37,50,65,82,101}; // x²+1
+const int TEST_DATA_A_Y[11] = {1,2,5,10,17,26,37,50,65,82,101}; // x²+1
 
 
 //int testData_Y[TEST_DATA_SIZE] = {};
@@ -40,7 +41,7 @@ void GP::run(){
   this->createPopulation();
   this->evaluatePopulation();
 
-  //this->tournamentSelection();
+  this->tournamentSelection();
 
   /*while(numberOfGenerations < MAX_GENERATIONS){
     numberOfGenerations++;
@@ -68,40 +69,22 @@ void GP::evaluatePopulation(){
   for(int i = 0; i < POPULATION_SIZE; i++){
     population[i].setFitness(evaluateIndividual(population[i]));
   }
-
 }
 
 /*
   * Calculates the fitness of an individual using MSE
 */
-int countA = 0;
 float GP::evaluateIndividual(Individual individualToEvaluate){
-  countA ++;
   float error = 0.0f;
   StringPrinter sp;
-  /*sp.printInt(55555);
-  sp.printInt(countA);*/
   for(int i = 0; i < TEST_DATA_SIZE; i++){
-    sp.printInt(44444);
-    sp.printInt(TEST_DATA_A_Y[i]);
     int y_result = decodeIndividual(individualToEvaluate, i);
-
     int y_real = TEST_DATA_A_Y[i];
-
-    /*sp.printInt(44444);
-    sp.printInt(y_result);
-    sp.printInt(33333);
-    sp.printInt(y_real);
-    sp.printInt(22222);*/
     float y_dist = (float)abs(y_real - y_result);
-    //sp.printInt(y_dist);
     float y_sqr = pow(y_dist, 2.0f); //danger??
-
     error += y_sqr;
-
   }
   error = sqrt(error / TEST_DATA_SIZE);
-  //sp.printInt(error);
   return error;
 }
 
@@ -112,41 +95,38 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
                 //a,b,c
   StringPrinter sp;
   int values[] = {x,0,0,-1,0,1};
+  int overflowError = 10000;
+
+  //start decoding
   for(int i = 0; i < individualToDecode.getSize(); i++){
-
-    //overflow handling
-    bool overflow = false;
-
     int result = 0;
     Instruction currentInstruction = individualToDecode.getInstructions()[i];
+    int operand1 = values[currentInstruction.op1];
+    int operand2 = values[currentInstruction.op2];
 
-    //sp.printInt(6666);
     switch (currentInstruction.operation) {
       case 0: // +
-        result = values[currentInstruction.op1] + values[currentInstruction.op2];
+        if(operand2 > 0 && operand1 > INT_MAX - operand2){
+          return overflowError;
+        }
+        result = operand1 + operand2;
         break;
       case 1: // -
-        result = values[currentInstruction.op1] - values[currentInstruction.op2];
+        if(operand2 < 0 && operand1 < INT_MIN - operand2){
+          return overflowError;
+        }
+        result = operand1 - operand2;
         break;
       case 2: // *
-        result = values[currentInstruction.op1] * values[currentInstruction.op2];
+        if(operand2 != 0 && operand1 > INT_MAX / operand2){
+          return overflowError;
+        }
+        result = operand1 * operand2;
         break;
     }
     values[currentInstruction.reg] = result; //if reg > 5 kabooom
   }
-
   return values[0];
-}
-
-//must be able to scale!
-bool GP::isOverflow(int values[], int size){
-  bool overflow = false;
-
-  for(int i = 0; i < size ; i++){
-
-  }
-
-  return overflow;
 }
 
 
