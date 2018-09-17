@@ -41,7 +41,9 @@ void GP::run(){
   this->createPopulation();
   this->evaluatePopulation();
 
-  this->tournamentSelection();
+
+  Individual children[2];
+  this->tournamentSelection(children);
 
   /*while(numberOfGenerations < MAX_GENERATIONS){
     numberOfGenerations++;
@@ -130,7 +132,7 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
 }
 
 
-void GP::tournamentSelection(){
+void GP::tournamentSelection(Individual children[]){
   if(TOURNAMENT_SIZE % 2 != 0){
     //kaboom
   }
@@ -168,12 +170,17 @@ void GP::tournamentSelection(){
   Individual winners[halfTourSize];
   Individual losers[halfTourSize];
 
+  //get winners and losers
   runTournament(firstTournament, secondTournament, winners, losers, halfTourSize);
 
+  //copy winners to losers
+  for(int i = 0; i < halfTourSize; i++){
+    losers[i].setInstructions(winners[i].individualNumber);
+    losers[i].setFitness(winners[i].getFitness());
+    losers[i].setSize(winners[i].getSize());
 
-
-
-
+    children[i] = winners[i];
+  }
 }
 
 void GP::runTournament(Individual firstTournament[], Individual secondTournament[],

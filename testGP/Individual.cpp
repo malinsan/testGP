@@ -14,7 +14,8 @@ const int REG_MAX = 2;
 const int OPERAND_MAX = 5;
 const int OPERATOR_MAX = 2;
 
-Instruction listOfInstructions[5][10] = {}; //maxlength * population
+const int maxL = 10;
+Instruction listOfInstructions[5][maxL] = {}; //population * maxlength
 int numberOfIndividuals = 0;
 
 Individual::Individual(){
@@ -45,8 +46,25 @@ Instruction* Individual::getInstructions(){
   return listOfInstructions[this->individualNumber];
 }
 
+/*
+* Used for copying the instructions of one individual to another
+*/
+void Individual::setInstructions(int listOfInstructionsIndex){
+  int k = this->individualNumber;
+  for(int i = 0; i < maxL; i++){
+    listOfInstructions[k][i] = listOfInstructions[listOfInstructionsIndex][i];
+    k++;
+    listOfInstructionsIndex++;
+  }
+
+}
+
 int Individual::getSize(){
   return size;
+}
+
+void Individual::setSize(int size){
+  this->size = size;
 }
 
 int Individual::getFitness(){

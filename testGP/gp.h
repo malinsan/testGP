@@ -22,11 +22,12 @@ class GP {
     bool isOverflow(int values[], int size);
 
     //selection
-    void tournamentSelection();
+    void tournamentSelection(Individual children[]);
     void runTournament(Individual firstTournament[], Individual secondTournament[],
                         Individual winners[], Individual losers[], int size);
 
 
+    //crossover
     /*
     * TO-DO rest of functions needed for gp
     */

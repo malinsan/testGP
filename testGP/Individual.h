@@ -12,7 +12,9 @@ class Individual
     int getFitness();
     void setFitness(int fitness);
     int getSize();
+    void setSize(int size);
     Instruction* getInstructions();
+    void setInstructions(int listOfInstructions);
     Individual();
     Individual(int length);
 
