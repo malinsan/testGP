@@ -17,7 +17,7 @@ class Individual
     void setInstructions(int listOfInstructions);
     void crossoverInstructions(int crossPoint1, int crossPoint2, int individual2);
     void mutate(int pMut);
-    void toString(char individualString [][10]);
+    void toString(char individualString []);
 
     Individual();
     Individual(int length);

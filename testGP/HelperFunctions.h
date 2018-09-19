@@ -4,9 +4,9 @@
 
 bool isValueInArray(int val, int array[], int size);
 
-char getRegChar(int reg);
-char getOperandChar(int op);
-char getOperationChar(int operation);
+void getRegChar(int reg, char result[]);
+void getOperandChar(int op, char result[]);
+void getOperationChar(int operation, char result[]);
 
 
 #endif

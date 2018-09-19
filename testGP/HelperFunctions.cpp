@@ -1,4 +1,5 @@
 #include "HelperFunctions.h"
+#include <stdio.h>
 
 bool isValueInArray(int val, int array[], int size){
   for(int i = 0; i < size; i++){
@@ -9,62 +10,57 @@ bool isValueInArray(int val, int array[], int size){
   return false;
 }
 
-char getRegChar(int reg){
-  char result;
+void getRegChar(int reg, char result[]){
   switch (reg) {
     case 0:
-      result = 'a';
+      sprintf(result, "a =");
       break;
     case 1:
-      result = 'b';
+      sprintf(result, "b =");
       break;
     case 2:
-      result = 'c';
+      sprintf(result, "c =");
       break;
     default:
       break;
   }
-  return result;
 }
 
-char getOperandChar(int op){
-  char result;
+void getOperandChar(int op, char result[]){
   switch (op) {
     case 0:
-      result = 'a';
+      sprintf(result, "%s a", result);
       break;
     case 1:
-      result = 'b';
+      sprintf(result, "%s b", result);
       break;
     case 2:
-      result = 'c';
+      sprintf(result, "%s c", result);
       break;
     case 3:
-      result = '-1';
+      sprintf(result, "%s -1", result);
       break;
     case 4:
-      result = '0';
+      sprintf(result, "%s 0", result);
       break;
     case 5:
-      result = '1';
+      sprintf(result, "%s 1", result);
       break;
     default:
       break;
   }
-  return result;
 }
 
-char getOperationChar(int operation){
-  char result;
+void getOperationChar(int operation, char result[]){
   switch (operation) {
     case 0:
-      result = '+';
+      sprintf(result, "%s +", result);
       break;
     case 1:
-      result = '-';
+      sprintf(result, "%s -", result);
       break;
     case 2:
-      result = '*';
+      sprintf(result, "%s *", result);
       break;
     default:
       break;

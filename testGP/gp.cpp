@@ -6,14 +6,16 @@
 #include <math.h>
 #include "HelperFunctions.h"
 #include <limits.h>
+#include "constants.h"
+#include <cstring> //memcpy
 
 /** ALL VARIABLES NEEDED **/
-const int POPULATION_SIZE = 20;
+//const int POPULATION_SIZE = 20;
 const int TEST_DATA_SIZE = 11;
 
-const int MAX_GENERATIONS = 500;
-const int MAX_LENGTH = 10;
-const int MIN_LENGTH = 5;
+const int MAX_GENERATIONS = 10;
+//const int MAX_LENGTH = Constants::MAX_LENGTH;
+const int MIN_LENGTH = 1;
 
 
 //selection
@@ -31,6 +33,8 @@ const int TEST_DATA_A_Y[11] = {1,2,5,10,17,26,37,50,65,82,101}; // x²+1
 const int TEST_DATA_B_Y[11] = {1,3,11,31,69,131,223,351,521,739,1011}; //x³+x+1
 const int TEST_DATA_C_Y[11] = {1, 4, 5, 9, 12, 15, 20, 67, 89, 120, 234}; //random function
 
+int TEST_DATA_Y[11];
+
 
 //int testData_Y[TEST_DATA_SIZE] = {};
 Individual population[POPULATION_SIZE] = {};
@@ -39,7 +43,7 @@ Individual population[POPULATION_SIZE] = {};
 
 
 GP::GP(){
-  //this->copyTestData();
+  this->copyTestData();
 }
 
 
@@ -58,10 +62,11 @@ void GP::run(){
     }
   }
 
-  char text[20] = "Best Individual: ";
+  char text[20] = "\rBest Individual: ";
   sp.printText(text);
   sp.printInt(bestIndividual.getFitness());
 
+  //start generations
   while(numberOfGenerations < MAX_GENERATIONS){
     sp.printInt(numberOfGenerations);
     numberOfGenerations++;
@@ -71,13 +76,14 @@ void GP::run(){
 
     //this->singlePointCrossover(children);
     //mutate children
-    this->mutation(children);
+    //this->mutation(children);
 
     //evaluate children
     for(int i = 0; i < 2; i++){
       children[i].setFitness(evaluateIndividual(children[i]));
       population[children[i].index] = children[i];
     }
+
   }
 
   //find best individual
@@ -88,15 +94,13 @@ void GP::run(){
     }
   }
 
-  //char text[20] = "Best Individual: ";
+  //last printout
   sp.printText(text);
   sp.printInt(bestIndividual.getFitness());
-  char individualString [bestIndividual.getSize()][10];
+  char individualString [bestIndividual.getSize() * 11];
   bestIndividual.toString(individualString);
+  sp.printText(individualString);
 
-  for(int i = 0; i < bestIndividual.getSize(); i++){
-    sp.printText(individualString[0]);
-  }
 }
 
 
@@ -114,27 +118,32 @@ void GP::createPopulation(){
 }
 
 void GP::evaluatePopulation(){
+  StringPrinter sp;
   for(int i = 0; i < POPULATION_SIZE; i++){
-    population[i].setFitness(evaluateIndividual(population[i]));
+    int fitness = evaluateIndividual(population[i]);
+    population[i].setFitness(fitness);
   }
 }
 
 /*
   * Calculates the fitness of an individual using MSE
 */
-float GP::evaluateIndividual(Individual individualToEvaluate){
+int GP::evaluateIndividual(Individual individualToEvaluate){
   float error = 0.0f;
   StringPrinter sp;
   for(int i = 0; i < TEST_DATA_SIZE; i++){
     int y_result = decodeIndividual(individualToEvaluate, i);
 
-    int y_real = TEST_DATA_A_Y[i];
+    int y_real = TEST_DATA_Y[i];
     float y_dist = (float)abs(y_real - y_result);
+
     float y_sqr = pow(y_dist, 2.0f); //danger??
-    error += y_sqr;
+    //error += y_sqr;
+    error += y_dist;
   }
-  error = sqrt(error / TEST_DATA_SIZE);
-  return error;
+  //error = sqrt(error / TEST_DATA_SIZE);
+  //sp.printInt(error);
+  return (int)error;
 }
 
 /*
@@ -301,7 +310,7 @@ void GP::mutation(Individual children[]){
 
 void GP::copyTestData(){
   for(int i = 0; i < TEST_DATA_SIZE; i++){
-//    testData_Y[i] = TEST_DATA_A_Y[i];
+    TEST_DATA_Y[i] = TEST_DATA_A_Y[i];
   }
 
 }

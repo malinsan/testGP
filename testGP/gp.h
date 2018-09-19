@@ -15,7 +15,7 @@ class GP {
     GP();
   private:
     void createPopulation();
-    float evaluateIndividual(Individual individualToEvaluate);
+    int evaluateIndividual(Individual individualToEvaluate);
     int decodeIndividual(Individual individualToDecode, int x);
     void evaluatePopulation();
     void copyTestData();

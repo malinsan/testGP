@@ -3,6 +3,7 @@
 #include "StringPrinter.h"
 #include "HelperFunctions.h"
 #include <stdio.h>
+#include "constants.h"
 
 /*
   * Registers:  a, b, c :
@@ -16,12 +17,12 @@ const int REG_MAX = 2;
 const int OPERAND_MAX = 5;
 const int OPERATOR_MAX = 2;
 
-const int maxL = 10;
-Instruction listOfInstructions[20][maxL] = {}; //population * maxlength
-int numberOfIndividuals = 0;
+Instruction listOfInstructions[POPULATION_SIZE][MAX_LENGTH] = {}; //population * maxlength
+static int numberOfIndividuals = 0;
 
 Individual::Individual(){
-  Individual(10);
+  //for when creating children
+  //Individual(10);
 }
 
 Individual::Individual(int length){
@@ -34,10 +35,10 @@ Individual::Individual(int length){
   this->individualNumber = numberOfIndividuals;
 
   for(int i = 0; i < length; i++){
-    listOfInstructions[numberOfIndividuals][i].reg = randN.getRandomNumber(0, REG_MAX);
-    listOfInstructions[numberOfIndividuals][i].op1 = randN.getRandomNumber(0, OPERAND_MAX);
-    listOfInstructions[numberOfIndividuals][i].op2 = randN.getRandomNumber(0, OPERAND_MAX);
-    listOfInstructions[numberOfIndividuals][i].operation = randN.getRandomNumber(0, OPERATOR_MAX);
+    listOfInstructions[individualNumber][i].reg = randN.getRandomNumber(0, REG_MAX);
+    listOfInstructions[individualNumber][i].op1 = randN.getRandomNumber(0, OPERAND_MAX);
+    listOfInstructions[individualNumber][i].op2 = randN.getRandomNumber(0, OPERAND_MAX);
+    listOfInstructions[individualNumber][i].operation = randN.getRandomNumber(0, OPERATOR_MAX);
   }
 
 
@@ -53,7 +54,7 @@ Instruction* Individual::getInstructions(){
 */
 void Individual::setInstructions(int listOfInstructionsIndex){
   int k = this->individualNumber;
-  for(int i = 0; i < maxL; i++){
+  for(int i = 0; i < MAX_LENGTH; i++){
     listOfInstructions[k][i] = listOfInstructions[listOfInstructionsIndex][i];
   }
 }
@@ -61,19 +62,19 @@ void Individual::setInstructions(int listOfInstructionsIndex){
 void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, int individual2){
 
   //save instructions
-  Instruction savedInstructions [maxL];
-  for(int i = 0; i < maxL; i++){
+  Instruction savedInstructions [MAX_LENGTH];
+  for(int i = 0; i < MAX_LENGTH; i++){
     savedInstructions[i] = listOfInstructions[this->individualNumber][i];
   }
 
   //overwrite instructions
   int k = crossPoint2;
-  for(int i = crossPoint1; i < maxL; i++){
+  for(int i = crossPoint1; i < MAX_LENGTH; i++){
     listOfInstructions[this->individualNumber][i] = listOfInstructions[individual2][k];
     k++;
   }
   k = crossPoint1;
-  for(int i = crossPoint2; i < maxL; i++){
+  for(int i = crossPoint2; i < MAX_LENGTH; i++){
     listOfInstructions[individual2][i] = savedInstructions[k];
     k++;
   }
@@ -107,17 +108,20 @@ void Individual::mutate(int pMut){
 
 }
 
-void Individual::toString(char individualString [][10]){
+void Individual::toString(char individualString []){
+  StringPrinter sp;
+  sprintf(individualString, "\r");
   for(int i = 0; i < this->size; i++){
     Instruction currentInstruction = listOfInstructions[this->individualNumber][i];
 
-    char reg = getRegChar(currentInstruction.reg);
-    char op1 = getOperandChar(currentInstruction.op1);
-    char op2 = getOperandChar(currentInstruction.op2);
-    char operation = getOperationChar(currentInstruction.operation);
+    char currentInstructionString[11];
 
-    sprintf(individualString[i], "%c = %c %c %c \r", reg, op1, operation, op2);
+    getRegChar(currentInstruction.reg, currentInstructionString);
+    getOperandChar(currentInstruction.op1, currentInstructionString);
+    getOperationChar(currentInstruction.operation, currentInstructionString);
+    getOperandChar(currentInstruction.op2, currentInstructionString);
 
+    sprintf(individualString, "%s %s \r",individualString, currentInstructionString);
   }
 }
 
