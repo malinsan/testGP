@@ -59,8 +59,9 @@ void Individual::setInstructions(int listOfInstructionsIndex){
   }
 }
 
-void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, int individual2){
+/*void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, Individual individual2){
 
+  StringPrinter sp;
   //save instructions of this individual
   Instruction savedInstructions [this->size];
   for(int i = 0; i < this->size; i++){
@@ -69,15 +70,44 @@ void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, int ind
 
   //overwrite instructions
   int k = crossPoint2;
-  for(int i = crossPoint1; i < MAX_LENGTH; i++){
-    listOfInstructions[this->individualNumber][i] = listOfInstructions[individual2][k];
+  for(int i = crossPoint1; i < individual2.getSize(); i++){
+    listOfInstructions[this->individualNumber][i] = listOfInstructions[individual2.individualNumber][k];
     k++;
   }
+
   k = crossPoint1;
-  for(int i = crossPoint2; i < MAX_LENGTH; i++){
-    listOfInstructions[individual2][i] = savedInstructions[k];
+  for(int i = crossPoint2; i < this->size; i++){
+    listOfInstructions[individual2.individualNumber][i] = savedInstructions[k];
     k++;
   }
+
+  //recalc size
+  int tmpSize = this->size;
+  this->size = crossPoint1 + (individual2.getSize() - crossPoint2);
+  individual2.setSize(crossPoint2 + (tmpSize - crossPoint1));
+}*/
+
+void Individual::crossoverInstructions(int crossPoint, Individual otherIndividual){
+
+  StringPrinter sp;
+  //save instructions of this individual
+  Instruction savedInstructions [this->size];
+  for(int i = 0; i < this->size; i++){
+    savedInstructions[i] = listOfInstructions[this->individualNumber][i];
+  }
+
+  for(int i = crossPoint; i < otherIndividual.getSize(); i++){
+    listOfInstructions[this->individualNumber][i] = listOfInstructions[otherIndividual.individualNumber][i];
+  }
+
+  for(int i = crossPoint; i < this->size; i++){
+    listOfInstructions[otherIndividual.individualNumber][i] = savedInstructions[i];
+  }
+
+  int tmpSize = this->size;
+  this->size = otherIndividual.getSize();
+  otherIndividual.setSize(tmpSize);
+
 }
 
 void Individual::mutate(int pMut){

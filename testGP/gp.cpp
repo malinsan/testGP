@@ -13,9 +13,8 @@
 //const int POPULATION_SIZE = 20;
 const int TEST_DATA_SIZE = 11;
 
-const int MAX_GENERATIONS = 10;
-//const int MAX_LENGTH = Constants::MAX_LENGTH;
-const int MIN_LENGTH = 2;
+const int MAX_GENERATIONS = 100;
+const int MIN_LENGTH = 3;
 
 
 //selection
@@ -159,8 +158,9 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
 
   //start decoding
   for(int i = 0; i < individualToDecode.getSize(); i++){
-    int result = 0;
     Instruction currentInstruction = individualToDecode.getInstructions()[i];
+
+    int result = 0;
     int operand1 = values[currentInstruction.op1];
     int operand2 = values[currentInstruction.op2];
 
@@ -185,6 +185,9 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
         break;
       default:
         sp.printInt(99999);
+        sp.printInt(currentInstruction.operation);
+        sp.printInt(88888);
+        sp.printInt(individualToDecode.getSize());
         break;
     }
     values[currentInstruction.reg] = result; //if reg > 5 kabooom
@@ -279,8 +282,42 @@ void GP::runTournament(Individual firstTournament[], Individual secondTournament
   losers[1] = loser;
 }
 
-
 void GP::singlePointCrossover(Individual children[]){
+  Random randNum;
+
+  if(randNum.getRandomNumber(0,100) < PCROSS){
+
+    //pick a crossover point
+    int smallestSize = children[0].getSize();
+    if(children[1].getSize() < smallestSize){
+      smallestSize = children[1].getSize();
+    }
+
+    int crossPoint = randNum.getRandomNumber(1, smallestSize-1);
+    //crossover point picked
+
+    children[0].crossoverInstructions(crossPoint, children[1]);
+
+  }
+}
+
+
+void GP::mutation(Individual children[]){
+  for(int i = 0; i < 2; i++){
+    children[i].mutate(PMUT);
+  }
+}
+
+
+void GP::copyTestData(){
+  for(int i = 0; i < TEST_DATA_SIZE; i++){
+    TEST_DATA_Y[i] = TEST_DATA_A_Y[i];
+  }
+
+}
+
+
+/*void GP::singlePointCrossover(Individual children[]){
   Random randNum;
   StringPrinter sp;
 
@@ -300,21 +337,7 @@ void GP::singlePointCrossover(Individual children[]){
       child2NewSize = (children[1].getSize() - crossPoint2) + crossPoint1;
     }
 
-    children[0].crossoverInstructions((children[0].getSize() - crossPoint1), (children[1].getSize() - crossPoint2), children[1].individualNumber);
+    children[0].crossoverInstructions((children[0].getSize() - crossPoint1), (children[1].getSize() - crossPoint2), children[1]);
   }
 
-}
-
-void GP::mutation(Individual children[]){
-  for(int i = 0; i < 2; i++){
-    children[i].mutate(PMUT);
-  }
-}
-
-
-void GP::copyTestData(){
-  for(int i = 0; i < TEST_DATA_SIZE; i++){
-    TEST_DATA_Y[i] = TEST_DATA_A_Y[i];
-  }
-
-}
+}*/

@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define MAX_LENGTH 3
+#define MAX_LENGTH 5
 #define POPULATION_SIZE 10
 
 
