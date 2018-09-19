@@ -59,34 +59,6 @@ void Individual::setInstructions(int listOfInstructionsIndex){
   }
 }
 
-/*void Individual::crossoverInstructions(int crossPoint1, int crossPoint2, Individual individual2){
-
-  StringPrinter sp;
-  //save instructions of this individual
-  Instruction savedInstructions [this->size];
-  for(int i = 0; i < this->size; i++){
-    savedInstructions[i] = listOfInstructions[this->individualNumber][i];
-  }
-
-  //overwrite instructions
-  int k = crossPoint2;
-  for(int i = crossPoint1; i < individual2.getSize(); i++){
-    listOfInstructions[this->individualNumber][i] = listOfInstructions[individual2.individualNumber][k];
-    k++;
-  }
-
-  k = crossPoint1;
-  for(int i = crossPoint2; i < this->size; i++){
-    listOfInstructions[individual2.individualNumber][i] = savedInstructions[k];
-    k++;
-  }
-
-  //recalc size
-  int tmpSize = this->size;
-  this->size = crossPoint1 + (individual2.getSize() - crossPoint2);
-  individual2.setSize(crossPoint2 + (tmpSize - crossPoint1));
-}*/
-
 void Individual::crossoverInstructions(int crossPoint, Individual otherIndividual){
 
   StringPrinter sp;
@@ -144,7 +116,7 @@ void Individual::toString(char individualString []){
   for(int i = 0; i < this->size; i++){
     Instruction currentInstruction = listOfInstructions[this->individualNumber][i];
 
-    char currentInstructionString[11];
+    char currentInstructionString[20];
 
     getRegChar(currentInstruction.reg, currentInstructionString);
     getOperandChar(currentInstruction.op1, currentInstructionString);

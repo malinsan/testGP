@@ -13,7 +13,7 @@
 //const int POPULATION_SIZE = 20;
 const int TEST_DATA_SIZE = 11;
 
-const int MAX_GENERATIONS = 100;
+const int MAX_GENERATIONS = 1000;
 const int MIN_LENGTH = 3;
 
 
@@ -311,7 +311,7 @@ void GP::mutation(Individual children[]){
 
 void GP::copyTestData(){
   for(int i = 0; i < TEST_DATA_SIZE; i++){
-    TEST_DATA_Y[i] = TEST_DATA_A_Y[i];
+    TEST_DATA_Y[i] = TEST_DATA_B_Y[i];
   }
 
 }
