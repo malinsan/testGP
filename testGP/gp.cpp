@@ -15,7 +15,7 @@ const int TEST_DATA_SIZE = 11;
 
 const int MAX_GENERATIONS = 10;
 //const int MAX_LENGTH = Constants::MAX_LENGTH;
-const int MIN_LENGTH = 1;
+const int MIN_LENGTH = 2;
 
 
 //selection
@@ -68,15 +68,16 @@ void GP::run(){
 
   //start generations
   while(numberOfGenerations < MAX_GENERATIONS){
-    sp.printInt(numberOfGenerations);
+    //sp.printInt(numberOfGenerations);
     numberOfGenerations++;
 
     Individual children[2];
     this->tournamentSelection(children);
 
-    //this->singlePointCrossover(children);
+    this->singlePointCrossover(children);
+
     //mutate children
-    //this->mutation(children);
+    this->mutation(children);
 
     //evaluate children
     for(int i = 0; i < 2; i++){
@@ -85,6 +86,7 @@ void GP::run(){
     }
 
   }
+  //end generation loop
 
   //find best individual
   bestIndividual = population[0];
@@ -261,6 +263,7 @@ void GP::runTournament(Individual firstTournament[], Individual secondTournament
   }
   winners[0] = winner;
   losers[0] = loser;
+
   //run second tournament
   winner = secondTournament[0];
   loser = secondTournament[0];
@@ -279,6 +282,7 @@ void GP::runTournament(Individual firstTournament[], Individual secondTournament
 
 void GP::singlePointCrossover(Individual children[]){
   Random randNum;
+  StringPrinter sp;
 
   if(randNum.getRandomNumber(0,100) < PCROSS){
     //pick a crossover point
@@ -289,14 +293,14 @@ void GP::singlePointCrossover(Individual children[]){
     int crossPoint2 = 0;
 
     while(child1NewSize > MAX_LENGTH || child2NewSize > MAX_LENGTH){
-      crossPoint1 = randNum.getRandomNumber(1, children[0].getSize()-1);
+      crossPoint1 = randNum.getRandomNumber(1, children[0].getSize()-1); //number of instructions to switch
       crossPoint2 = randNum.getRandomNumber(1, children[1].getSize()-1);
 
-      child1NewSize = (crossPoint1) + (children[1].getSize() - crossPoint2);
-      child2NewSize = (crossPoint2) + (children[0].getSize() - crossPoint1);
+      child1NewSize = (children[0].getSize() - crossPoint1) + crossPoint2;
+      child2NewSize = (children[1].getSize() - crossPoint2) + crossPoint1;
     }
 
-    children[0].crossoverInstructions(crossPoint1, crossPoint2, children[1].individualNumber);
+    children[0].crossoverInstructions((children[0].getSize() - crossPoint1), (children[1].getSize() - crossPoint2), children[1].individualNumber);
   }
 
 }
