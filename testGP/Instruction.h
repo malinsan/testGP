@@ -1,7 +1,7 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
-struct instruction {
+struct Instruction {
   int reg;
   int op1;
   int op2;

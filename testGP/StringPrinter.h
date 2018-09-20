@@ -2,9 +2,6 @@
 #define STRINGPRINTER_H
 
 #include <stm32f4xx_usart.h>
-//#include <string>
-
-//using std::string;
 
 class StringPrinter
 {

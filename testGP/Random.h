@@ -7,10 +7,11 @@ class Random{
   public:
     uint8_t getRandomNumber(uint8_t min, uint8_t max);
     void getRandomNumberAsChar(char array[], uint8_t min, uint8_t max);
+    void getRandomNumberArray(int array[], int size, uint8_t min, uint8_t max);
     Random();
   private:
     void enableRNG();
-    static short int rng_enabled;
+    static bool rng_enabled;
 };
 
 #endif

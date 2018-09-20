@@ -14,11 +14,10 @@ extern "C" {
 
 #include "string.h"
 
-#include "constants.h"
 #include "StringPrinter.h"
 #include "Random.h"
 #include "Individual.h"
-
+#include "gp.h"
 
 #define BLINK_ON_TICKS (TIMER_FREQUENCY_HZ * 2 / 3)
 
@@ -64,12 +63,15 @@ void blink_led_init()
 
 }
 
+
+
+
 int main(int argc, char* argv[]){
 
+  /**
+    Initialization
+  */
   SystemInit();
-
-  Random randNum;
-  StringPrinter sp;
 
   blink_led_init();
   blink_led_on();
@@ -77,18 +79,22 @@ int main(int argc, char* argv[]){
   timer_start();
 
 
+  Random randNum;
+  StringPrinter sprint;
+  GP gp;
+
   char yoMom[] = "Din Mamma";
   char random[5];
   int r;
+  gp.run();
 
+  sprint.printStartUp();
 
-
-  sp.printStartUp();
 
    while(1){
 
-      randNum.getRandomNumberAsChar(random, 5, 50);
-      r = randNum.getRandomNumber(5,30);
+      randNum.getRandomNumberAsChar(random, 0, 2);
+      r = randNum.getRandomNumber(0,2);
 
       blink_led_on();
 
@@ -96,9 +102,9 @@ int main(int argc, char* argv[]){
 
       blink_led_off();
 
-      sp.printText(yoMom);
-      sp.printText(random);
-      sp.printInt(r);
+      //sprint.printText(yoMom);
+      //sprint.printText(random);
+      //sprint.printInt(r);
 
       timer_sleep(BLINK_OFF_TICKS);
 
@@ -106,8 +112,6 @@ int main(int argc, char* argv[]){
 
 
 }
-
-
 
 
 
