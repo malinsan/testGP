@@ -13,7 +13,7 @@
 const int TEST_DATA_SIZE = 11;
 
 const int MAX_GENERATIONS = 1000;
-const int MIN_LENGTH = 10;
+const int MIN_LENGTH = 11;
 
 
 //selection
@@ -31,6 +31,7 @@ const int TEST_DATA_A_Y[11] = {1,2,5,10,17,26,37,50,65,82,101}; // x²+1
 const int TEST_DATA_B_Y[11] = {1,3,11,31,69,131,223,351,521,739,1011}; //x³+x+1
 const int TEST_DATA_C_Y[11] = {1, 4, 5, 9, 12, 15, 20, 67, 89, 120, 234}; //random function
 const int TEST_DATA_D_Y[11] = {-5, -2, 11, 58, 187, 470,1003, 1906, 3323, 5422, 8395}; // x⁴ - 2x³ + 4x² - 5
+const int TEST_DATA_E_Y[11] = {1,3,7,13,21,31,43,57,73,91,111};
 
 int TEST_DATA_Y[11];
 
@@ -80,7 +81,7 @@ void GP::run(){
 
     //evaluate children
     for(int i = 0; i < 2; i++){
-      children[i].setFitness(evaluateIndividual(children[i], false));
+      children[i].setFitness(evaluateIndividual(children[i]));
       population[children[i].index] = children[i];
     }
 
@@ -102,12 +103,6 @@ void GP::run(){
   bestIndividual.toString(individualString);
   sp.printText(individualString);
 
-  //error stuiff
-  /*if(bestIndividual.getFitness() <= 3){
-    sp.printInt(55555);
-    evaluateIndividual(bestIndividual, true);
-  }*/
-
 }
 
 
@@ -127,7 +122,7 @@ void GP::createPopulation(){
 void GP::evaluatePopulation(){
   StringPrinter sp;
   for(int i = 0; i < POPULATION_SIZE; i++){
-    int fitness = evaluateIndividual(population[i], false);
+    int fitness = evaluateIndividual(population[i]);
     population[i].setFitness(fitness);
   }
 }
@@ -135,38 +130,22 @@ void GP::evaluatePopulation(){
 /*
   * Calculates the fitness of an individual using MSE
 */
-int GP::evaluateIndividual(Individual individualToEvaluate, bool test){
+int GP::evaluateIndividual(Individual individualToEvaluate){
 
   float error = 0.0f;
-  StringPrinter sp;
-
-  if(test){
-    sp.printInt(44444);
-  }
-
   for(int i = 0; i < TEST_DATA_SIZE; i++){
     int y_result = decodeIndividual(individualToEvaluate, i);
 
-    int y_real = TEST_DATA_D_Y[i];
+    int y_real = TEST_DATA_E_Y[i]; //decide testdata here because otherwise C is going to be blehch
+
     float y_dist = (float)abs(y_real - y_result);
 
 
     float y_sqr = pow(y_dist, 2.0f); //danger??
 
     error += y_sqr;
-    if(test){
-      sp.printInt(33333);
-      sp.printInt(y_result);
-      sp.printInt(y_real);
-      sp.printInt(y_dist);
-      sp.printInt(22222);
-      sp.printInt(y_sqr);
-    }
   }
   error = sqrt(error / TEST_DATA_SIZE);
-  if(test){
-    sp.printInt(error);
-  }
   return (int)error;
 }
 
