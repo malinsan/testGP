@@ -3,18 +3,17 @@
 #include "Instruction.h"
 #include "Random.h"
 #include "StringPrinter.h"
-#include <math.h>
+#include <math.h> //sqrt, abs, and pow in evaluateIndividual()
 #include "HelperFunctions.h"
-#include <limits.h>
+#include <limits.h> //INT_MAX and INT_MIN
 #include "constants.h"
-#include <cstring> //memcpy
 
 /** ALL VARIABLES NEEDED **/
 //const int POPULATION_SIZE = 20;
 const int TEST_DATA_SIZE = 11;
 
 const int MAX_GENERATIONS = 1000;
-const int MIN_LENGTH = 5;
+const int MIN_LENGTH = 10;
 
 
 //selection
@@ -43,7 +42,7 @@ Individual population[POPULATION_SIZE] = {};
 
 
 GP::GP(){
-  this->copyTestData();
+  //this->copyTestData();
 }
 
 
@@ -209,8 +208,13 @@ int GP::decodeIndividual(Individual individualToDecode, int x){
         break;
       default:
         sp.printInt(99999);
+        sp.printInt(currentInstruction.reg);
+        sp.printInt(currentInstruction.op1);
         sp.printInt(currentInstruction.operation);
+
+        sp.printInt(currentInstruction.op2);
         sp.printInt(88888);
+        sp.printInt(individualToDecode.getSize());
         sp.printInt(individualToDecode.getNumberOfCrossovers());
         break;
     }

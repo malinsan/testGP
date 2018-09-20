@@ -38,8 +38,8 @@ Individual::Individual(int length){
   for(int i = 0; i < length; i++){
     listOfInstructions[individualNumber][i].reg = randN.getRandomNumber(0, REG_MAX);
     listOfInstructions[individualNumber][i].op1 = randN.getRandomNumber(0, OPERAND_MAX);
-    listOfInstructions[individualNumber][i].op2 = randN.getRandomNumber(0, OPERAND_MAX);
     listOfInstructions[individualNumber][i].operation = randN.getRandomNumber(0, OPERATOR_MAX);
+    listOfInstructions[individualNumber][i].op2 = randN.getRandomNumber(0, OPERAND_MAX);
   }
 
 
