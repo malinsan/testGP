@@ -17,8 +17,9 @@ const int REG_MAX = 2;
 const int OPERAND_MAX = 5;
 const int OPERATOR_MAX = 2;
 
-Instruction listOfInstructions[POPULATION_SIZE][MAX_LENGTH] = {}; //population * maxlength
+static Instruction listOfInstructions[POPULATION_SIZE][MAX_LENGTH] = {}; //population * maxlength
 static int numberOfIndividuals = 0;
+static int numberOfCrossovers = 0;
 
 Individual::Individual(){
   //for when creating children
@@ -60,6 +61,7 @@ void Individual::setInstructions(int listOfInstructionsIndex){
 }
 
 void Individual::crossoverInstructions(int crossPoint, Individual otherIndividual){
+  numberOfCrossovers++;
 
   StringPrinter sp;
   //save instructions of this individual
@@ -141,4 +143,8 @@ int Individual::getFitness(){
 
 void Individual::setFitness(int fitness){
   this->fitness = fitness;
+}
+
+int Individual::getNumberOfCrossovers(){
+  return numberOfCrossovers;
 }

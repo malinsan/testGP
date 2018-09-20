@@ -20,6 +20,8 @@ class Individual
     void mutate(int pMut);
     void toString(char individualString []);
 
+    int getNumberOfCrossovers();
+
     Individual();
     Individual(int length);
 
