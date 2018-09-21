@@ -36,8 +36,6 @@ extern "C" {
 
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-void initPeripherals(void);
-
 void blink_led_init()
 {
 
@@ -113,13 +111,12 @@ int main(int argc, char* argv[]){
   */
   SystemInit();
 
-  initPeripherals(); //init usart2
+  initPeripherals(); //init USART2
   InterruptHandler interruptHandler;
 
   StringPrinter sprint;
-//  Random randNum;
-  //InterruptHandler interruptHandler;
-//  GP gp;
+//Random randNum;
+// GP gp;
 
 
   blink_led_init();
@@ -140,14 +137,9 @@ int main(int argc, char* argv[]){
 
       blink_led_off();
 
-      /*if(interruptHandler.getSaveFlagStatus()){
-        sprint.printText(yoMom);
-        interruptHandler.setSaveFlagStatus(false);
-      }*/
-
       if(interruptHandler.getSaveFlagStatus()){
-        //sprint.printText(yoMom);
-        sprint.printInt(444);
+        sprint.printInt(22222);
+        interruptHandler.saveRowToFlash();
         interruptHandler.setSaveFlagStatus(false);
       }
 
