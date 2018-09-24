@@ -7,11 +7,11 @@ class InterruptHandler
 public:
   int getSaveFlagStatus();
   void setSaveFlagStatus(bool status);
-  void saveRowToFlash();
+  void saveRowsToFlash();
   InterruptHandler();
 private:
   int convertASCIIToFloats(char data_row[], float array[], int size);
-  int writeToFlash(float array[], int row);
+  int writeToFlash(float array[]);
 
 };
 

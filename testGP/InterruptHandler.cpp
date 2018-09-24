@@ -8,20 +8,21 @@
 
 #define FLASH_START_ADD           ((uint32_t) 0x08080000)
 #define FLASH_END_ADD             ((uint32_t) 0x08100000)
-#define NUMBER_OF_ELEMENTS_IN_ROW 5
+#define NUMBER_OF_ELEMENTS_IN_ROW 10
 #define ROW_SIZE_IN_BYTES         20 // NUMBER_OF_ELEMENTS_IN_ROW * 4 bytes
+#define SIZE_OF_ROW_ARRAY         200
 
-char row[200];
-char copy_of_row[200];
+char rows[SIZE_OF_ROW_ARRAY][NUMBER_OF_ELEMENTS_IN_ROW * 2];
+int sizeOfRows[SIZE_OF_ROW_ARRAY];
+char copy_of_row[200]; //throw away?
 
 static bool save_row_flag = false;
-static int numberOfRowsWrittenOnFlash = 0;
+static int numberOfRowsWrittenToFlash = 0;
 static int pos = 0;
-static int sizeOfCopyRow = 0;
+static int sizeOfCopyRow = 0; //släng
+static int numberOfRows = 0;
 
 InterruptHandler::InterruptHandler(){
-  USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-  NVIC_EnableIRQ(USART2_IRQn);
 }
 
 int InterruptHandler::getSaveFlagStatus(){
@@ -32,76 +33,135 @@ void InterruptHandler::setSaveFlagStatus(bool status){
   save_row_flag = status;
 }
 
-void InterruptHandler::saveRowToFlash(){
+void InterruptHandler::saveRowsToFlash(){
   StringPrinter sp;
   sp.printInt(33333);
-  float rowArrayInFloats[NUMBER_OF_ELEMENTS_IN_ROW + 1] = {};
-  convertASCIIToFloats(copy_of_row, rowArrayInFloats, sizeOfCopyRow);
-  sp.printInt(55555);
+  sp.printInt(numberOfRows);
 
-  writeToFlash(rowArrayInFloats, numberOfRowsWrittenOnFlash);
-  sp.printInt(66666);
 
-  numberOfRowsWrittenOnFlash++;
+  for(int i = 0; i < numberOfRows; i++){
+    float rowArrayInFloats[NUMBER_OF_ELEMENTS_IN_ROW + 1] = {};
+    convertASCIIToFloats(rows[i], rowArrayInFloats, sizeOfRows[i]);
+    sp.printInt(55555);
+    //writeToFlash(rowArrayInFloats);
+    sp.printInt(66666);
+  }
+
+
 
   sp.printInt(99999);
-  sp.printInt(numberOfRowsWrittenOnFlash);
+  sp.printInt(numberOfRowsWrittenToFlash);
 
 }
 
 //** INTERNAL METHODS *//
 
+/*
+* Malins little version of strtok
+* returns false when the end of the buffer is reached, otherwise returns true
+*/
+bool myStrtok(bool firstRun, char buffer [], const char delimiter [], char returnString []){
+  static int bufferPosition;
+  if(firstRun){
+    bufferPosition = 0;
+  }
+  if(buffer[bufferPosition] == '\0'){ //when the end of buffer is reached
+    return false;
+  }
+
+  int startPostion = bufferPosition;
+  int endPosition = startPostion;
+
+  while(buffer[endPosition] != delimiter[0]){
+    endPosition++;
+  }
+
+  int i;
+  int j = 0;
+  for(i = startPostion; i < endPosition; i++){
+    returnString[j] = buffer[i];
+    j++;
+  }
+  returnString[j] = '\0';
+
+  bufferPosition = endPosition + 1;
+
+  return true;
+}
+
+float stof(char s []){
+  float rez = 0, fact = 1;
+  int pos = 0;
+  if (s[pos] == '-'){
+    pos++;
+    fact = -1;
+  }
+  for (bool point_seen = false; s[pos] != '\0'; pos++){
+    if (s[pos] == '.'){
+      point_seen = true;
+      continue;
+    }
+    int d = s[pos] - '0';
+    if (d >= 0 && d <= 9){
+      if (point_seen){
+        fact /= 10.0f;
+      }
+      rez = rez * 10.0f + (float)d;
+    }
+  }
+  return rez * fact;
+
+}
+
+
 void makeCopyOfDataRow(char dataRow[], int length, char copyRow[]){
+  StringPrinter sp;
   int i = 0;
   for(i = 0; i <= length; i++){
     copyRow[i] = dataRow[i];
   }
   copyRow[i] = '\0';
+  sizeOfCopyRow = length;
 }
 
 
 int InterruptHandler::convertASCIIToFloats(char data_row[], float array[], int size){
   StringPrinter sp;
-  if (!data_row)
-  {
+
+  if (!data_row){
     return -1;
   }
 
-  if (size < 4)
-  {
+  if (size < 4){
     return -1;
   }
 
-  //const char COMMA[2] = ",";
+  const char COMMA[2] = ",";
   char tmp[200];
   makeCopyOfDataRow(data_row, size, tmp);
+  char token[10];
+  bool tokenizeBuffer = myStrtok(true, tmp,COMMA,token);
+
 
   int var = 0;
+  while( tokenizeBuffer ) {
 
-  char hej[] = "this,is,your,mom";
-  char *token;
+    if (var >= NUMBER_OF_ELEMENTS_IN_ROW)
+    {
+      break;
+    }
+    float data_value = (float)stof(token);
+    sp.printInt(data_value);
 
-  sp.printInt(44444);
+    array[var] = data_value;
 
-  token = strtok(hej,",");
-  sp.printInt(42424);
-
-  while( token != NULL ) {
-      if (var >= NUMBER_OF_ELEMENTS_IN_ROW)
-      {
-        break;
-      }
-      float data_value = (float)atof(token);
-      array[var] = data_value;
-
-      var++;
-      token = strtok(NULL, ",");
+    var++;
+    tokenizeBuffer = myStrtok(false, tmp,COMMA,token);
   }
 
   // if first element is empty
   if (array[0] == 0)
   {
-    sp.printInt(66666);
     return -1;
   }
 
@@ -109,35 +169,36 @@ int InterruptHandler::convertASCIIToFloats(char data_row[], float array[], int s
 
 }
 
-int InterruptHandler::writeToFlash(float array[], int row)
+int InterruptHandler::writeToFlash(float array[])
 {
   StringPrinter sp;
-    char buff[100];
+  char buff[100];
 
-    if (FLASH_START_ADD +(row+1)*ROW_SIZE_IN_BYTES >= FLASH_END_ADD)
-    {
-      return -1;
-    }
+  if (FLASH_START_ADD +(numberOfRowsWrittenToFlash+1)*ROW_SIZE_IN_BYTES >= FLASH_END_ADD)
+  {
+    return -1;
+  }
 
-    volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
+  volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
 
 //    uint32_t i = 0;
-    for(int i = 0; i < NUMBER_OF_ELEMENTS_IN_ROW; i++)
+  for(int i = 0; i < NUMBER_OF_ELEMENTS_IN_ROW; i++)
+  {
+    uint32_t adr = (FLASH_START_ADD + (i*sizeof(float)) + numberOfRowsWrittenToFlash*ROW_SIZE_IN_BYTES);
+    FLASH_Unlock();
+    FLASHStatus = FLASH_ProgramWord(adr, *(uint32_t *)&array[i]);
+    FLASH_Lock();
+    if (FLASHStatus != FLASH_COMPLETE)
     {
-      uint32_t adr = (FLASH_START_ADD + (i*sizeof(float)) + row*ROW_SIZE_IN_BYTES);
-      FLASH_Unlock();
-      FLASHStatus = FLASH_ProgramWord(adr, *(uint32_t *)&array[i]);
-      FLASH_Lock();
-      if (FLASHStatus != FLASH_COMPLETE)
-      {
-        sprintf(buff, "Failed with %d %x %x \n", FLASHStatus, adr, FLASH->SR);
-        sp.printText(buff);
-        break;
-      }
-
+      sprintf(buff, "Failed with %d %x %x \n", FLASHStatus, adr, FLASH->SR);
+      sp.printText(buff);
+      break;
     }
 
-    return 0;
+  }
+
+  numberOfRowsWrittenToFlash++;
+  return 0;
 
 }
 
@@ -145,8 +206,6 @@ int InterruptHandler::writeToFlash(float array[], int row)
 //interrupt handling
 extern "C" {
   void USART2_IRQHandler(void) {
-    StringPrinter sp;
-
     if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) // never in a while loop
     {
       USART_ClearITPendingBit(USART2, USART_IT_RXNE);//clear flag
@@ -159,18 +218,16 @@ extern "C" {
       }
 
       if(received_data == 33){
-        sp.printInt(55555);
       }
 
-      row[pos++] = received_data;
-      if(received_data == 10) // if NULL char, that means it has read a whole row
+      rows[numberOfRows][pos++] = received_data;
+      if(received_data == 13) // if newline char, that means it has read a whole row
       {
-        row[pos] = 0;
-        makeCopyOfDataRow(row, pos, copy_of_row);
-        sizeOfCopyRow = pos;
+        rows[numberOfRows][pos] = 0; //insert null on the row
+        sizeOfRows[numberOfRows] = pos;
         pos = 0;         // restart position
+        numberOfRows++;
         save_row_flag = true;
-        sp.printInt(11111);
       }
     }
 

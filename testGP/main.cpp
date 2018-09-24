@@ -81,7 +81,7 @@ void initPeripherals(void) {
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_USART2);
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_USART2);
 
-
+  USART_Cmd(USART2, ENABLE);
 
   USART_InitStruct.USART_BaudRate = 38400; // should be set to 57600 on putty/realterm
   USART_InitStruct.USART_WordLength = USART_WordLength_8b;
@@ -97,10 +97,8 @@ void initPeripherals(void) {
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);*/
 
-  //USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-  USART_Cmd(USART2, ENABLE);
-
-  //NVIC_EnableIRQ(USART2_IRQn);
+  USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+  NVIC_EnableIRQ(USART2_IRQn);
 }
 
 
@@ -139,7 +137,7 @@ int main(int argc, char* argv[]){
 
       if(interruptHandler.getSaveFlagStatus()){
         sprint.printInt(22222);
-        interruptHandler.saveRowToFlash();
+        interruptHandler.saveRowsToFlash();
         interruptHandler.setSaveFlagStatus(false);
       }
 
