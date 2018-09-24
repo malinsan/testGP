@@ -141,6 +141,8 @@ int main(int argc, char* argv[]){
         interruptHandler.setSaveFlagStatus(false);
       }
 
+      sprint.printInt(interruptHandler.getValueFromFlash(1,1));
+
       //sprint.printText(yoMom);
       //sprint.printText(random);
       //sprint.printInt(r);

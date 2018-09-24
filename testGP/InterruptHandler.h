@@ -8,6 +8,7 @@ public:
   int getSaveFlagStatus();
   void setSaveFlagStatus(bool status);
   void saveRowsToFlash();
+  float getValueFromFlash(int rowNmr, int x);
   InterruptHandler();
 private:
   int convertASCIIToFloats(char data_row[], float array[], int size);

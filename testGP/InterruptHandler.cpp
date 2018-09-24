@@ -43,7 +43,7 @@ void InterruptHandler::saveRowsToFlash(){
     float rowArrayInFloats[NUMBER_OF_ELEMENTS_IN_ROW + 1] = {};
     convertASCIIToFloats(rows[i], rowArrayInFloats, sizeOfRows[i]);
     sp.printInt(55555);
-    //writeToFlash(rowArrayInFloats);
+    writeToFlash(rowArrayInFloats);
     sp.printInt(66666);
   }
 
@@ -51,6 +51,14 @@ void InterruptHandler::saveRowsToFlash(){
 
   sp.printInt(99999);
   sp.printInt(numberOfRowsWrittenToFlash);
+
+}
+
+float InterruptHandler::getValueFromFlash(int rowNmr, int x){
+  float* f = (float*)FLASH_START_ADD;
+
+  return f[(rowNmr * NUMBER_OF_ELEMENTS_IN_ROW) + (x)];
+  //return f[2];
 
 }
 
@@ -89,6 +97,9 @@ bool myStrtok(bool firstRun, char buffer [], const char delimiter [], char retur
   return true;
 }
 
+/*
+* Turns a char array into a float
+*/
 float stof(char s []){
   float rez = 0, fact = 1;
   int pos = 0;
@@ -137,10 +148,10 @@ int InterruptHandler::convertASCIIToFloats(char data_row[], float array[], int s
   }
 
   const char COMMA[2] = ",";
-  char tmp[200];
+  char tmp[SIZE_OF_ROW_ARRAY];
   makeCopyOfDataRow(data_row, size, tmp);
   char token[10];
-  bool tokenizeBuffer = myStrtok(true, tmp,COMMA,token);
+  bool tokenizeBuffer = myStrtok(true,tmp,COMMA,token);
 
 
   int var = 0;
@@ -156,7 +167,7 @@ int InterruptHandler::convertASCIIToFloats(char data_row[], float array[], int s
     array[var] = data_value;
 
     var++;
-    tokenizeBuffer = myStrtok(false, tmp,COMMA,token);
+    tokenizeBuffer = myStrtok(false,tmp,COMMA,token);
   }
 
   // if first element is empty
@@ -172,6 +183,7 @@ int InterruptHandler::convertASCIIToFloats(char data_row[], float array[], int s
 int InterruptHandler::writeToFlash(float array[])
 {
   StringPrinter sp;
+  sp.printInt(6868);
   char buff[100];
 
   if (FLASH_START_ADD +(numberOfRowsWrittenToFlash+1)*ROW_SIZE_IN_BYTES >= FLASH_END_ADD)
@@ -186,12 +198,13 @@ int InterruptHandler::writeToFlash(float array[])
   {
     uint32_t adr = (FLASH_START_ADD + (i*sizeof(float)) + numberOfRowsWrittenToFlash*ROW_SIZE_IN_BYTES);
     FLASH_Unlock();
-    FLASHStatus = FLASH_ProgramWord(adr, *(uint32_t *)&array[i]);
+    FLASHStatus = FLASH_ProgramWord(adr, (uint32_t)array[i]);
     FLASH_Lock();
     if (FLASHStatus != FLASH_COMPLETE)
     {
       sprintf(buff, "Failed with %d %x %x \n", FLASHStatus, adr, FLASH->SR);
       sp.printText(buff);
+      sp.printInt(6767);
       break;
     }
 
