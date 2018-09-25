@@ -6,11 +6,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define FLASH_START_ADD           ((uint32_t) 0x08080000)
-#define FLASH_END_ADD             ((uint32_t) 0x08100000)
+
 #define NUMBER_OF_ELEMENTS_IN_ROW 10
-#define ROW_SIZE_IN_BYTES         20 // NUMBER_OF_ELEMENTS_IN_ROW * 4 bytes
+#define ROW_SIZE_IN_BYTES         NUMBER_OF_ELEMENTS_IN_ROW * 4 // NUMBER_OF_ELEMENTS_IN_ROW * 4 bytes
 #define SIZE_OF_ROW_ARRAY         200
+
+int writeToFlash(float* array, int rowNumber); //extern C?
 
 char rows[SIZE_OF_ROW_ARRAY][NUMBER_OF_ELEMENTS_IN_ROW * 2];
 int sizeOfRows[SIZE_OF_ROW_ARRAY];
@@ -23,6 +24,7 @@ static int sizeOfCopyRow = 0; //släng
 static int numberOfRows = 0;
 
 InterruptHandler::InterruptHandler(){
+  FLASH_SetLatency(FLASH_Latency_5);
 }
 
 int InterruptHandler::getSaveFlagStatus(){
@@ -38,15 +40,30 @@ void InterruptHandler::saveRowsToFlash(){
   sp.printInt(33333);
   sp.printInt(numberOfRows);
 
+  FLASH_Unlock();
+  FLASH_Status status = FLASH_EraseSector(FLASH_Sector_8, VoltageRange_3);
+  if(status == FLASH_COMPLETE){
+    sp.printInt(3232);
+  }
+  //FLASH_Lock();
 
-  for(int i = 0; i < numberOfRows; i++){
+  /*for(int i = 0; i < numberOfRows; i++){
     float rowArrayInFloats[NUMBER_OF_ELEMENTS_IN_ROW + 1] = {};
     convertASCIIToFloats(rows[i], rowArrayInFloats, sizeOfRows[i]);
     sp.printInt(55555);
-    writeToFlash(rowArrayInFloats);
+    writeToFlash(rowArrayInFloats, i);
     sp.printInt(66666);
   }
+*/
 
+  //FLASH_Unlock();
+  //uint32_t adr = (FLASH_END_ADD - sizeof(uint32_t)); // -4
+  uint32_t adr = FLASH_START_ADD;
+  float num = 5.0f;
+  uint32_t data = *(uint32_t *)&num;
+  //(void)FLASH_ProgramWord(adr, (uint32_t)numberOfRowsWrittenToFlash);
+  FLASH_ProgramWord(adr, data);
+  FLASH_Lock();//lock the flash for writing
 
 
   sp.printInt(99999);
@@ -57,8 +74,8 @@ void InterruptHandler::saveRowsToFlash(){
 float InterruptHandler::getValueFromFlash(int rowNmr, int x){
   float* f = (float*)FLASH_START_ADD;
 
-  return f[(rowNmr * NUMBER_OF_ELEMENTS_IN_ROW) + (x)];
-  //return f[2];
+  //return f[(rowNmr * NUMBER_OF_ELEMENTS_IN_ROW) + (x)];
+  return *f;
 
 }
 
@@ -180,13 +197,13 @@ int InterruptHandler::convertASCIIToFloats(char data_row[], float array[], int s
 
 }
 
-int InterruptHandler::writeToFlash(float array[])
+int writeToFlash(float* array, int rowNumber)
 {
   StringPrinter sp;
   sp.printInt(6868);
   char buff[100];
 
-  if (FLASH_START_ADD +(numberOfRowsWrittenToFlash+1)*ROW_SIZE_IN_BYTES >= FLASH_END_ADD)
+  if (FLASH_START_ADD +(rowNumber+1)*ROW_SIZE_IN_BYTES >= FLASH_END_ADD)
   {
     return -1;
   }
@@ -196,21 +213,25 @@ int InterruptHandler::writeToFlash(float array[])
 //    uint32_t i = 0;
   for(int i = 0; i < NUMBER_OF_ELEMENTS_IN_ROW; i++)
   {
-    uint32_t adr = (FLASH_START_ADD + (i*sizeof(float)) + numberOfRowsWrittenToFlash*ROW_SIZE_IN_BYTES);
+    uint32_t adr = (FLASH_START_ADD + (i*32) + rowNumber*ROW_SIZE_IN_BYTES);
+
     FLASH_Unlock();
-    FLASHStatus = FLASH_ProgramWord(adr, (uint32_t)array[i]);
+    FLASHStatus = FLASH_ProgramWord(adr, *(uint32_t *)&array[i]);
     FLASH_Lock();
+
     if (FLASHStatus != FLASH_COMPLETE)
     {
       sprintf(buff, "Failed with %d %x %x \n", FLASHStatus, adr, FLASH->SR);
       sp.printText(buff);
       sp.printInt(6767);
       break;
+    }else{
+      numberOfRowsWrittenToFlash++;
     }
 
   }
 
-  numberOfRowsWrittenToFlash++;
+
   return 0;
 
 }

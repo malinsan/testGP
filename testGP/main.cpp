@@ -128,6 +128,11 @@ int main(int argc, char* argv[]){
 
   sprint.printStartUp();
 
+  char buff[100];
+  uint32_t *r = (uint32_t*)(FLASH_END_ADD - sizeof(uint32_t));
+  sprintf(buff, "%d rows in flash\n\r", *r);
+  sprint.printText(buff);
+
    while(1){
       blink_led_on();
 

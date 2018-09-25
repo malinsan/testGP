@@ -1,6 +1,8 @@
 #ifndef INTERRUPT_HANDLER_H
 #define INTERRUPT_HANDLER_H
 
+#define FLASH_START_ADD           ((uint32_t) 0x08080000) //sector 8
+#define FLASH_END_ADD             ((uint32_t) 0x0809FFFF)
 
 class InterruptHandler
 {
@@ -12,7 +14,7 @@ public:
   InterruptHandler();
 private:
   int convertASCIIToFloats(char data_row[], float array[], int size);
-  int writeToFlash(float array[]);
+  //int writeToFlash(float array[]);
 
 };
 
