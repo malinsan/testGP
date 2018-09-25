@@ -8,7 +8,7 @@ StringPrinter::StringPrinter(void){
 
 
 void StringPrinter::printStartUp(){
-	char systemStarted[15] = "\n\rSystem Started\n\r";
+	char systemStarted[20] = "\n\rSystem Started\n\r";
 	this->printText(systemStarted);
 }
 
