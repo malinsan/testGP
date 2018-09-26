@@ -22,6 +22,7 @@ extern "C" {
 #include "Individual.h"
 #include "gp.h"
 #include "InterruptHandler.h"
+#include "FlashWriter.h"
 
 #define BLINK_ON_TICKS (TIMER_FREQUENCY_HZ * 2 / 3)
 
@@ -109,8 +110,9 @@ int main(int argc, char* argv[]){
   */
   SystemInit();
 
-  initPeripherals(); //init USART2
+  initPeripherals(); //init USART2, maybe put in another file :p
   InterruptHandler interruptHandler;
+  FlashWriter flashWriter;
 
   StringPrinter sprint;
 //Random randNum;
@@ -128,10 +130,6 @@ int main(int argc, char* argv[]){
 
   sprint.printStartUp();
 
-  char buff[100];
-  uint32_t *r = (uint32_t*)(FLASH_END_ADD - sizeof(uint32_t));
-  sprintf(buff, "%d rows in flash\n\r", *r);
-  sprint.printText(buff);
 
    while(1){
       blink_led_on();
@@ -142,11 +140,22 @@ int main(int argc, char* argv[]){
 
       if(interruptHandler.getSaveFlagStatus()){
         sprint.printInt(22222);
-        interruptHandler.saveRowsToFlash();
+        //get one row
+        char* aRowOfData = interruptHandler.getSavedDataRow(0);
+        char aRowOfDataArray [NUMBER_OF_ELEMENTS_IN_ROW * 4];
+        for(int i = 0; i < interruptHandler.getRowSize(0); i++){
+          aRowOfDataArray[i] = *aRowOfData;
+          aRowOfData++;
+        }
+        flashWriter.writeCharArrayAsFloatToFlash(FLASH_START_ADD, aRowOfDataArray, interruptHandler.getRowSize(0));
+        sprint.printInt(55555);
+
+        float result = flashWriter.getValueFromFlashAsFloat(FLASH_START_ADD + (4 * sizeof(float)));
+        sprint.printInt(result);
         interruptHandler.setSaveFlagStatus(false);
       }
 
-      sprint.printInt(interruptHandler.getValueFromFlash(1,1));
+
 
       //sprint.printText(yoMom);
       //sprint.printText(random);

@@ -58,6 +58,7 @@ SRCCPP+=gp.cpp
 SRCCPP+=HelperFunctions.cpp
 SRCCPP+=constants.cpp
 SRCCPP+=InterruptHandler.cpp
+SRCCPP+=FlashWriter.cpp
 
 SRC=Timer.c
 #SRC+=itoa.c
