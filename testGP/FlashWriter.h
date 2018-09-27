@@ -21,6 +21,8 @@ public:
 
   uint32_t getValueFromFlash(uint32_t adr);
   float getValueFromFlashAsFloat(uint32_t adr);
+
+  void eraseFlashSector();
 private:
 
 };

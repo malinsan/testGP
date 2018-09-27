@@ -15,7 +15,7 @@ FlashWriter::FlashWriter(){
 
 }
 
-void eraseFlashSector(){
+void FlashWriter::eraseFlashSector(){
   FLASH_Unlock();
 
   FLASH_EraseSector(FLASH_Sector_8, VoltageRange_3);
@@ -50,15 +50,13 @@ void FlashWriter::writeFloatValueToFlash(uint32_t adr, float data){
 }
 
 void FlashWriter::writeCharArrayAsFloatToFlash(uint32_t adr, char data [], int dataSize){
-  float floatDataArray[dataSize] = {};
+  float floatDataArray[NUMBER_OF_ELEMENTS_IN_ROW] = {};
   //translate char array into a float array
   convertASCIIToFloats(data, floatDataArray, dataSize);
 
-  eraseFlashSector();
-
   adr += numberOfRowsWrittenToFlash * ROW_SIZE_IN_BYTES; //jump over rows
 
-  for(int i = 0; i < dataSize; i++){
+  for(int i = 0; i < NUMBER_OF_ELEMENTS_IN_ROW; i++){
     this->writeFloatValueToFlash(adr + (i * sizeof(float)), floatDataArray[i]);
   }
 
