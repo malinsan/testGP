@@ -6,8 +6,9 @@
 #ifndef INTERRUPT_HANDLER_H
 #define INTERRUPT_HANDLER_H
 
-#define NUMBER_OF_ELEMENTS_IN_ROW 10
-#define ROW_SIZE_IN_BYTES         NUMBER_OF_ELEMENTS_IN_ROW * 4 // NUMBER_OF_ELEMENTS_IN_ROW * 4 bytes
+#define NUMBER_OF_ELEMENTS_IN_ROW 6
+#define ROW_SIZE                  NUMBER_OF_ELEMENTS_IN_ROW * 5 //43.56 => 5 chars
+//#define ROW_SIZE_IN_BYTES         ROW_SIZE * 4 // NUMBER_OF_ELEMENTS_IN_ROW * 4 bytes
 #define NUMBER_OF_ROWS         200
 
 

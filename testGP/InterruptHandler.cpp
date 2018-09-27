@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 
-char savedData[NUMBER_OF_ROWS][NUMBER_OF_ELEMENTS_IN_ROW * 2];
+char savedData[NUMBER_OF_ROWS][ROW_SIZE];
 int sizeOfRows[NUMBER_OF_ROWS];
 
 static bool save_row_flag = false;

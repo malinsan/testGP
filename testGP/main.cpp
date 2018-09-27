@@ -17,6 +17,7 @@ extern "C" {
 
 #include "string.h"
 
+#include "HelperFunctions.h" //makeCopyOfDataRow()
 #include "StringPrinter.h"
 #include "Random.h"
 #include "Individual.h"
@@ -126,8 +127,6 @@ int main(int argc, char* argv[]){
 
   //gp.run(); //start genetic programming
 
-  //char yoMom[20] = "Din mamma";
-
   sprint.printStartUp();
 
 
@@ -142,11 +141,10 @@ int main(int argc, char* argv[]){
         sprint.printInt(22222);
         //get one row
         char* aRowOfData = interruptHandler.getSavedDataRow(0);
-        char aRowOfDataArray [NUMBER_OF_ELEMENTS_IN_ROW * 4];
-        for(int i = 0; i < interruptHandler.getRowSize(0); i++){
-          aRowOfDataArray[i] = *aRowOfData;
-          aRowOfData++;
-        }
+        
+        char aRowOfDataArray [NUMBER_OF_ELEMENTS_IN_ROW * 4]; //data must be in an array for it to work
+        makeCopyOfDataRow(aRowOfData, NUMBER_OF_ELEMENTS_IN_ROW*4, aRowOfDataArray);
+
         flashWriter.writeCharArrayAsFloatToFlash(FLASH_START_ADD, aRowOfDataArray, interruptHandler.getRowSize(0));
         sprint.printInt(55555);
 

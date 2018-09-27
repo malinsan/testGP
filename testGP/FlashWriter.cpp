@@ -3,10 +3,12 @@
 #include <stm32f4xx_usart.h>
 #include "StringPrinter.h"
 #include "HelperFunctions.h"
+#include "InterruptHandler.h" //number of elemetns
 
 #include <stdint.h> //uint32_t
 
 static int numberOfRowsWrittenToFlash = 0;
+const int ROW_SIZE_IN_BYTES = NUMBER_OF_ELEMENTS_IN_ROW * sizeof(float);
 
 FlashWriter::FlashWriter(){
     FLASH_SetLatency(FLASH_Latency_5);
@@ -49,15 +51,18 @@ void FlashWriter::writeFloatValueToFlash(uint32_t adr, float data){
 
 void FlashWriter::writeCharArrayAsFloatToFlash(uint32_t adr, char data [], int dataSize){
   float floatDataArray[dataSize] = {};
-  //translate char array into float array
+  //translate char array into a float array
   convertASCIIToFloats(data, floatDataArray, dataSize);
 
   eraseFlashSector();
-  
+
+  adr += numberOfRowsWrittenToFlash * ROW_SIZE_IN_BYTES; //jump over rows
+
   for(int i = 0; i < dataSize; i++){
     this->writeFloatValueToFlash(adr + (i * sizeof(float)), floatDataArray[i]);
   }
 
+  numberOfRowsWrittenToFlash++;
 
 }
 
