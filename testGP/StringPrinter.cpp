@@ -8,7 +8,7 @@ StringPrinter::StringPrinter(void){
 
 
 void StringPrinter::printStartUp(){
-	char systemStarted[15] = "System Started";
+	char systemStarted[20] = "\n\rSystem Started\n\r";
 	this->printText(systemStarted);
 }
 
@@ -17,7 +17,7 @@ void StringPrinter::printStartUp(){
 //wrapper
 void StringPrinter::printText(char * s){
 	if(!usartInit){
-		init_USART2();
+		//init_USART2();
 		usartInit = true;
 	}
 	StringPrinter::USART_PutString(s);
@@ -58,9 +58,10 @@ void StringPrinter::USART_PutString(char * s)
 
 */
 
-void StringPrinter::init_USART2(void) {
+/*void StringPrinter::init_USART2(void) {
   GPIO_InitTypeDef GPIO_InitStruct;
   USART_InitTypeDef USART_InitStruct;
+	NVIC_InitTypeDef NVIC_InitStructure;
 
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
@@ -75,18 +76,27 @@ void StringPrinter::init_USART2(void) {
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_USART2);
   GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_USART2);
 
-  USART_Cmd(USART2, ENABLE);
-
   USART_InitStruct.USART_BaudRate = 38400; // should be set to 57600 on putty/realterm
   USART_InitStruct.USART_WordLength = USART_WordLength_8b;
   USART_InitStruct.USART_StopBits = USART_StopBits_1;
   USART_InitStruct.USART_Parity = USART_Parity_No;
   USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-
-
   USART_Init(USART2, &USART_InitStruct);
+
   USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-  NVIC_EnableIRQ(USART2_IRQn);
+
+	NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+
+//  NVIC_EnableIRQ(USART2_IRQn);
+  //NVIC_EnableIRQ(USART2_IRQn);
+
+
+  USART_Cmd(USART2, ENABLE);
 
 }
+*/
