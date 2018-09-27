@@ -25,9 +25,7 @@ void FlashWriter::eraseFlashSector(){
 
 void FlashWriter::writeValueToFlash(uint32_t adr, uint32_t data){
   FLASH_Unlock();
-
-  //FLASH_EraseSector(FLASH_Sector_8, VoltageRange_3);
-
+  
   FLASH_ProgramWord(adr, data);
 
   FLASH_Lock();//lock the flash for writing

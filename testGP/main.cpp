@@ -146,14 +146,11 @@ int main(int argc, char* argv[]){
           char* aRowOfData = interruptHandler.getSavedDataRow(i);
           char aRowOfDataArray [NUMBER_OF_ELEMENTS_IN_ROW * 4]; //data must be in an array for it to work
           makeCopyOfDataRow(aRowOfData, NUMBER_OF_ELEMENTS_IN_ROW*4, aRowOfDataArray);
-          //write data to flashs
+
+          //write data to flash
           flashWriter.writeCharArrayAsFloatToFlash(FLASH_START_ADD, aRowOfDataArray, interruptHandler.getRowSize(i));
-          sprint.printInt(55555);
         }
 
-
-
-        //float result = flashWriter.getValueFromFlashAsFloat(FLASH_START_ADD + (0 * NUMBER_OF_ELEMENTS_IN_ROW * sizeof(float)) + (5 * sizeof(float)));
         float result = flashWriter.getSpecificElement(2,2);
         sprint.printInt(result);
         interruptHandler.setSaveFlagStatus(false);
