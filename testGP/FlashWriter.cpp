@@ -72,3 +72,13 @@ float FlashWriter::getValueFromFlashAsFloat(uint32_t adr){
   return *result;
 
 }
+
+float FlashWriter::getSpecificElement(int row, int x){
+  uint32_t adr = FLASH_START_ADD;
+  //row
+  adr += row * ROW_SIZE_IN_BYTES;
+  //element
+  adr += x * sizeof(float);
+
+  return getValueFromFlashAsFloat(adr);
+}

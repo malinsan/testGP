@@ -153,7 +153,8 @@ int main(int argc, char* argv[]){
 
 
 
-        float result = flashWriter.getValueFromFlashAsFloat(FLASH_START_ADD + (2 * NUMBER_OF_ELEMENTS_IN_ROW * sizeof(float)) + (0 * sizeof(float)));
+        //float result = flashWriter.getValueFromFlashAsFloat(FLASH_START_ADD + (0 * NUMBER_OF_ELEMENTS_IN_ROW * sizeof(float)) + (5 * sizeof(float)));
+        float result = flashWriter.getSpecificElement(2,2);
         sprint.printInt(result);
         interruptHandler.setSaveFlagStatus(false);
       }
